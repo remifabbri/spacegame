@@ -56,7 +56,7 @@ var laserOnScreen = function(){
     for(i=0; i<arrayLaser.length; i++){
         arrayLaser[i].drawShot();
 
-        if(arrayLaser[i].cordYLaser <= 100){
+        if(arrayLaser[i].cordYLaser <= 0){
             arrayLaser.splice([i], 1); 
         }
     }
@@ -64,19 +64,21 @@ var laserOnScreen = function(){
 /********************************************************************/
 /************ Vaisseaux Ennemis *************************************/
 
+var posShipX = -50,
+    posShipY = -50
 
-var ShipEnnemyChasseur = function(){ // function constructeur chasseur ennemi 
+var ShipEnnemyChasseur = function(posShipX, posShipY){ // function constructeur chasseur ennemi 
     this.imgEC = new Image();
     this.imgEC.src = './assets/files/PixelSpaceships/red_03T.png';
     this.life = 500;
-    this.cordXEC = 10;
-    this.cordYEC = 10;
+    this.cordXEC = posShipX;
+    this.cordYEC = posShipY;
     this.arrayLaserEC = [];
     
     this.drawEC = function(){ 
         ctx.drawImage(this.imgEC, this.cordXEC, this.cordYEC);
         this.cordXEC +=1;
-        this.cordYEC +=1;
+        this.cordYEC +=1.5;
     };
 
     this.drawLaserEC = {
@@ -125,25 +127,39 @@ var ShipEnnemyChasseur = function(){ // function constructeur chasseur ennemi
     }
 }
 
-var arrayEnnemyEC = [];
+
+/*******************************GESTION DE JEU */
+
+var arrayEnnemyEC = [],
+    countProdEnnemyEC = 0
 
 var gestionEnnemyEc = function (){
 
-    if(timer == undefined || (Date.now() - timer) >= 2000){
-        
-        if(arrayEnnemyEC.length<5){
-            arrayEnnemyEC.push(new ShipEnnemyChasseur());
+    if( arrayEnnemyEC.length < 5){
+        console.log("posShipX ----"+posShipX+"  posShipY -------"+posShipY );
+        arrayEnnemyEC.push(new ShipEnnemyChasseur(posShipX, posShipY));
+        posShipX = Math.random()*posShipX - 80;
+        posShipY = Math.random()*posShipY - 100;
+        countProdEnnemyEC +=1; 
+        console.log(countProdEnnemyEC); 
+        if(countProdEnnemyEC == 5){
+            posShipX = -80;
+            posShipY = -80;
+            countProdEnnemyEC = 0;
+            console.log("posShipX ----"+posShipX+"  posShipY -------"+posShipY ); 
         }
-        
-        timer = Date.now(); 
     }
+    
     for (var i=0; i < arrayEnnemyEC.length; i++){
         arrayEnnemyEC[i].drawEC();
     }
     
     for (var i=0; i < arrayEnnemyEC.length; i++){
        
-        //console.log(arrayEnnemyEC[i].arrayLaserEC);
+        if(arrayEnnemyEC[i].cordYEC >= 600){
+            arrayEnnemyEC.splice([i], 1); 
+        }
+        //console.log(arrayEnnemyEC[i]);
 
         if(arrayEnnemyEC[i].arrayLaserEC.length < 5){
 
@@ -151,7 +167,7 @@ var gestionEnnemyEc = function (){
             if(countLaser == 30 ){
                 arrayEnnemyEC[i].pushLaserEC();
                 //countLaser+=1;
-                console.log(" 1 ---------------- if"); 
+                
             }
             if(countLaser > 30){
                 countLaser = 0; 
@@ -162,6 +178,18 @@ var gestionEnnemyEc = function (){
         for (y=0; y<arrayEnnemyEC[i].arrayLaserEC.length; y++){
             arrayEnnemyEC[i].laserOnScreenEC(); 
             //console.log(arrayEnnemyEC[i]); 
+        }
+    }
+}
+
+var colision = function(){
+    for(var f=0; f<arrayLaser.length; f++){
+        for(var g=0; g < arrayEnnemyEC.length; g++){ 
+            console.log(arrayEnnemyEC[g][1]); 
+            //console.log( arrayLaser[f][1]); 
+            if(arrayEnnemyEC[g][1] < arrayLaser[f][1] /*&& arrayEnnemyEC[g][1] + 43 > arrayLaser[f][1] && arrayEnnemyEC[g][4] < arrayLaser[f][2] && arrayEnnemyEC[g][4] + 50 > arrayLaser[f][2]*/){
+                arrayEnnemyEC.splice([g], 1);
+            }
         }
     }
 }
@@ -186,8 +214,9 @@ var moteurJeux = function(){
     shipPlayer();
     pushLaser(); 
     laserOnScreen();
-    gestionEnnemyEc(); 
-    //console.log(arrayEnnemyEC); 
+    gestionEnnemyEc();
+    colision(); 
+    console.log(arrayEnnemyEC); 
     //console.log(arrayEnnemyEC.arrayLaserEC);
     moteur = setTimeout(moteurJeux, 1000/30); 
 }
