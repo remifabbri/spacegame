@@ -141,12 +141,12 @@ var gestionEnnemyEc = function (){
         posShipX = Math.random()*posShipX - 80;
         posShipY = Math.random()*posShipY - 100;
         countProdEnnemyEC +=1; 
-        console.log(countProdEnnemyEC); 
+        //console.log(countProdEnnemyEC); 
         if(countProdEnnemyEC == 5){
             posShipX = -80;
             posShipY = -80;
             countProdEnnemyEC = 0;
-            console.log("posShipX ----"+posShipX+"  posShipY -------"+posShipY ); 
+            //console.log("posShipX ----"+posShipX+"  posShipY -------"+posShipY ); 
         }
     }
     
@@ -183,12 +183,12 @@ var gestionEnnemyEc = function (){
 }
 
 var colision = function(){
-    for(var f=0; f<arrayLaser.length; f++){
-        for(var g=0; g < arrayEnnemyEC.length; g++){ 
-            console.log(arrayEnnemyEC[g][1]); 
-            //console.log( arrayLaser[f][1]); 
-            if(arrayEnnemyEC[g][1] < arrayLaser[f][1] /*&& arrayEnnemyEC[g][1] + 43 > arrayLaser[f][1] && arrayEnnemyEC[g][4] < arrayLaser[f][2] && arrayEnnemyEC[g][4] + 50 > arrayLaser[f][2]*/){
+    // Gestion des colision des laser du joueur avec les chasseursEnnemy
+    for(var f=0; f<arrayLaser.length; f++){ // Parcour la table des lasers du joueur
+        for(var g=0; g < arrayEnnemyEC.length; g++){ //Parcour la table des chasseursEnnemy 
+            if(arrayLaser[f].cordXLaser > arrayEnnemyEC[g].cordXEC && arrayLaser[f].cordXLaser < arrayEnnemyEC[g].cordXEC + 43  && arrayLaser[f].cordYLaser > arrayEnnemyEC[g].cordYEC  && arrayLaser[f].cordYLaser < arrayEnnemyEC[g].cordYEC + 50){
                 arrayEnnemyEC.splice([g], 1);
+                console.log('touché !!!!'); 
             }
         }
     }
@@ -216,7 +216,7 @@ var moteurJeux = function(){
     laserOnScreen();
     gestionEnnemyEc();
     colision(); 
-    console.log(arrayEnnemyEC); 
+    //console.log(arrayEnnemyEC); 
     //console.log(arrayEnnemyEC.arrayLaserEC);
     moteur = setTimeout(moteurJeux, 1000/30); 
 }
