@@ -4,6 +4,8 @@ var canvas,
     shipPlayerCordY,
     shipPlayerH = 45,
     shipPlayerW = 40,
+    bulletPlayer,
+    bulletEnnemy, 
     backgroundBackY = 0, 
     backgroundBackY2 = -4096,
     timer,
@@ -42,12 +44,11 @@ var pushLaser = function(){
 }
 
 var Laser = function(cordX, cordY){
-    this.cordXLaser = cordX + shipPlayerH/2; 
-    this.cordYLaser = cordY;
+    this.cordXLaser = cordX + shipPlayerH/2 - 1.5; 
+    this.cordYLaser = cordY - shipPlayerW/3;
     
     this.drawShot = function(){
-        ctx.fillRect(this.cordXLaser, this.cordYLaser, 2, 10); 
-        ctx.fillStyle = "rgb(0,255,0)";
+        ctx.drawImage(bulletPlayer, this.cordXLaser, this.cordYLaser);
         this.cordYLaser -=15; 
     }
 }
@@ -61,22 +62,29 @@ var laserOnScreen = function(){
         }
     }
 }
-/********************************************************************/
-/************ Vaisseaux Ennemis *************************************/
+/********************************************************************
+******* Vaisseaux Ennemis *******************************************
+********************************************************************/
 
-var posShipX = -50,
+//Chasseur Ennemie 
+
+var posShipX = -50,   // position par défaut
     posShipY = -50
 
 var ShipEnnemyChasseur = function(posShipX, posShipY){ // function constructeur chasseur ennemi 
     this.imgEC = new Image();
     this.imgEC.src = './assets/files/PixelSpaceships/red_03T.png';
-    this.life = 500;
+    this.life = 50;
     this.cordXEC = posShipX;
     this.cordYEC = posShipY;
     this.arrayLaserEC = [];
     
     this.drawEC = function(){ 
         ctx.drawImage(this.imgEC, this.cordXEC, this.cordYEC);
+        if(this.life < 50){
+            ctx.fillRect(this.cordXEC, this.cordYEC, this.life, 3 );
+            ctx.fillStyle= "#ff0000"; 
+        }
         this.cordXEC +=1;
         this.cordYEC +=1.5;
     };
@@ -86,8 +94,7 @@ var ShipEnnemyChasseur = function(posShipX, posShipY){ // function constructeur 
         cordYLaserEC : 0,
     
         drawShotEC : function(){
-            ctx.fillRect(this.cordXLaserEC, this.cordYLaserEC, 2, 10),
-            ctx.fillStyle = "rgb(0,0,255)",
+            ctx.drawImage(bulletEnnemy, this.cordXLaserEC, this.cordYLaserEC);
             this.cordYLaserEC += 5
         }
     }
@@ -184,10 +191,17 @@ var gestionEnnemyEc = function (){
 
 var colision = function(){
     // Gestion des colision des laser du joueur avec les chasseursEnnemy
-    for(var f=0; f<arrayLaser.length; f++){ // Parcour la table des lasers du joueur
+    for(var f=0; f<arrayLaser.length-2; f++){ // Parcour la table des lasers du joueur (-2 sur le length permet d'eviter le bug (cordXLaser is not defined))
         for(var g=0; g < arrayEnnemyEC.length; g++){ //Parcour la table des chasseursEnnemy 
+            //console.log(arrayLaser[f].cordXLaser); 
+
             if(arrayLaser[f].cordXLaser > arrayEnnemyEC[g].cordXEC && arrayLaser[f].cordXLaser < arrayEnnemyEC[g].cordXEC + 43  && arrayLaser[f].cordYLaser > arrayEnnemyEC[g].cordYEC  && arrayLaser[f].cordYLaser < arrayEnnemyEC[g].cordYEC + 50){
-                arrayEnnemyEC.splice([g], 1);
+                arrayEnnemyEC[g].life -= 5; 
+                if(arrayEnnemyEC[g].life <= 0){
+                    arrayEnnemyEC.splice([g], 1);
+                }
+                
+                arrayLaser.splice([f], 1); 
                 console.log('touché !!!!'); 
             }
         }
@@ -203,6 +217,10 @@ var init = function(){ // Initialisation du canvas
     backgroundCanvasBack.src = './assets/files/Background/Nebula Aqua-Pink.png';
     shipPlayerImg = new Image();
     shipPlayerImg.src = './assets/files/PixelSpaceships/blue_05.png'; 
+    bulletPlayer = new Image(); 
+    bulletPlayer.src = './assets/files/Blue/bullet2.png';
+    bulletEnnemy = new Image(); 
+    bulletEnnemy.src = './assets/files/Red/bullet_red2.png';  
     console.log(shipPlayerImg); 
     pushLaser(); 
     moteurJeux(); // function récurcive 
@@ -215,7 +233,8 @@ var moteurJeux = function(){
     pushLaser(); 
     laserOnScreen();
     gestionEnnemyEc();
-    colision(); 
+    colision();
+    
     //console.log(arrayEnnemyEC); 
     //console.log(arrayEnnemyEC.arrayLaserEC);
     moteur = setTimeout(moteurJeux, 1000/30); 
