@@ -10,7 +10,8 @@ var canvas,
     backgroundBackY2 = -4096,
     timer,
     timerLaser,
-    countLaser = 0 
+    countLaser = 0,
+    score = 0
 
 var clearRect = function(){
     ctx.clearRect(0,0,400, 600); 
@@ -38,9 +39,14 @@ var shipPlayer = function(){ //function qui dessine le vaisseau du joueur sur le
 }
 
 var arrayLaser = [];
+var countLaserPlayer = 0; 
 
 var pushLaser = function(){
-    arrayLaser.push(new Laser(shipPlayerCordX, shipPlayerCordY)); 
+    countLaserPlayer += 1;
+    if(countLaserPlayer >= 2){
+        arrayLaser.push(new Laser(shipPlayerCordX, shipPlayerCordY));
+        countLaserPlayer = 0; 
+    }
 }
 
 var Laser = function(cordX, cordY){
@@ -68,7 +74,9 @@ var laserOnScreen = function(){
 
 //Chasseur Ennemie 
 
-var posShipX = -50,   // position par défaut
+
+var arrayEnnemyEC = [],
+    posShipX = -50,   // position par défaut
     posShipY = -50
 
 var ShipEnnemyChasseur = function(posShipX, posShipY){ // function constructeur chasseur ennemi 
@@ -84,7 +92,7 @@ var ShipEnnemyChasseur = function(posShipX, posShipY){ // function constructeur 
         if(this.life < 50){
             ctx.fillRect(this.cordXEC, this.cordYEC, this.life, 3 );
             ctx.fillStyle= "#ff0000"; 
-        }
+        } 
         this.cordXEC +=1;
         this.cordYEC +=1.5;
     };
@@ -137,8 +145,8 @@ var ShipEnnemyChasseur = function(posShipX, posShipY){ // function constructeur 
 
 /*******************************GESTION DE JEU */
 
-var arrayEnnemyEC = [],
-    countProdEnnemyEC = 0
+
+var countProdEnnemyEC = 0; 
 
 var gestionEnnemyEc = function (){
 
@@ -199,6 +207,7 @@ var colision = function(){
                 arrayEnnemyEC[g].life -= 5; 
                 if(arrayEnnemyEC[g].life <= 0){
                     arrayEnnemyEC.splice([g], 1);
+                    score = score + 10;
                 }
                 
                 arrayLaser.splice([f], 1); 
@@ -207,6 +216,8 @@ var colision = function(){
         }
     }
 }
+
+
 
 /********************************************************************/
 
