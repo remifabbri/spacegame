@@ -1,3 +1,5 @@
+console.log('v0.1.1'); 
+
 // Variable Global du jeu 
 var canvas,
     ctx,
