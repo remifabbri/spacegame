@@ -383,9 +383,13 @@ canvas.addEventListener('mousemove', function(evt){
     //console.log(shipPlayerCordY);  
 })
 
-canvas.addEventListener('touchmove', function(evt){ 
-    shipPlayerCordX = evt.clientX - canvas.offsetLeft - shipPlayerH/2;  
-    shipPlayerCordY = evt.clientY - canvas.offsetTop - shipPlayerW/2; 
-    //console.log(shipPlayerCordY);  
-})
+
+canvas.addEventListener("touchmove", function (e) {
+    var touch = e.touches[0];
+    var mouseEvent = new MouseEvent("mousemove", {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    canvas.dispatchEvent(mouseEvent);
+  }, false);
 
