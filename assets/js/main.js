@@ -1,18 +1,24 @@
 // Variable Global du jeu 
 var canvas,
     ctx,
+    heightCanvas = window.innerHeight, 
+    widthCanvas,
     backgroundBackY = 0, 
     backgroundBackY2 = -4096,
     bulletEnnemy, 
     timer,
     timerLaser,
-    
     countLaserTank= 0, 
     score = 0
 
+    if (window.innerWidth > 992){
+        widthCanvas = window.innerWidth/2;
+    }else{
+        widthCanvas = window.innerWidth;
+    }
 
 var clearRect = function(){
-    ctx.clearRect(0,0,400, 600); 
+    ctx.clearRect(0,0,widthCanvas, heightCanvas); 
 }
 
 var backgroundGame = function(){
@@ -80,8 +86,9 @@ var laserOnScreen = function(){
 
 
 var arrayEnnemyEC = [], // array de tout les ennemis
-    posShipX = 500,   // position par défaut
+    posShipX = widthCanvas,   // position par défaut
     posShipY = -50
+
 
 var ShipEnnemyChasseur = function(posShipX, posShipY){ // function constructeur chasseur ennemi 
     this.imgEC = new Image();
@@ -224,10 +231,12 @@ var gestionEnnemyEc = function (){
 
     if( arrayEnnemyEC.length < 5){
         arrayEnnemyEC.push(new ShipEnnemyChasseur( Math.random()*posShipX, posShipY));
+        
         countProdEnnemyEC +=1; 
         if(countProdEnnemyEC == 5){
             countProdEnnemyEC = 0;
         }
+         
     }
     
     for (var i=0; i < arrayEnnemyEC.length; i++){
@@ -330,11 +339,10 @@ var colision = function(){
 var init = function(){ // Initialisation du canvas
     canvas = document.querySelector('canvas');
     ctx = canvas.getContext('2d');
-    heightCanvas = window.innerHeight;
-    widthCanvas = window.innerWidth; 
-    ctx.canvas.height =heightCanvas- 2;
-    ctx.canvas.width= widthCanvas - 2;
-    alert(navigator.userAgent); 
+    
+    ctx.canvas.width= widthCanvas;
+    ctx.canvas.height =heightCanvas;
+
     backgroundCanvasBack = new Image(); 
     backgroundCanvasBack.src = './assets/files/Background/Nebula Aqua-Pink.png';
     shipPlayerImg = new Image();
@@ -368,6 +376,12 @@ init();
 // Déplacement du vaiseaux Joueur ------------------------
 
 canvas.addEventListener('mousemove', function(evt){ 
+    shipPlayerCordX = evt.clientX - canvas.offsetLeft - shipPlayerH/2;  
+    shipPlayerCordY = evt.clientY - canvas.offsetTop - shipPlayerW/2; 
+    //console.log(shipPlayerCordY);  
+})
+
+canvas.addEventListener('touchmouve', function(evt){ 
     shipPlayerCordX = evt.clientX - canvas.offsetLeft - shipPlayerH/2;  
     shipPlayerCordY = evt.clientY - canvas.offsetTop - shipPlayerW/2; 
     //console.log(shipPlayerCordY);  
