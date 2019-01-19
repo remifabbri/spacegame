@@ -1,17 +1,15 @@
-var canvas, 
+// Variable Global du jeu 
+var canvas,
     ctx,
-    shipPlayerCordX,
-    shipPlayerCordY,
-    shipPlayerH = 45,
-    shipPlayerW = 40,
-    bulletPlayer,
-    bulletEnnemy, 
     backgroundBackY = 0, 
     backgroundBackY2 = -4096,
+    bulletEnnemy, 
     timer,
     timerLaser,
-    countLaser = 0,
+    
+    countLaserTank= 0, 
     score = 0
+
 
 var clearRect = function(){
     ctx.clearRect(0,0,400, 600); 
@@ -34,12 +32,18 @@ var backgroundGame = function(){
 
 // vaisseau du joueur -----------------------------------
 
+// varaible Global joueur
+var shipPlayerCordX,
+    shipPlayerCordY,
+    shipPlayerH = 45,
+    shipPlayerW = 40,
+    bulletPlayer, 
+    arrayLaser = [],
+    countLaserPlayer = 0
+
 var shipPlayer = function(){ //function qui dessine le vaisseau du joueur sur le canvas 
     ctx.drawImage(shipPlayerImg, shipPlayerCordX, shipPlayerCordY);
 }
-
-var arrayLaser = [];
-var countLaserPlayer = 0; 
 
 var pushLaser = function(){
     countLaserPlayer += 1;
@@ -75,8 +79,8 @@ var laserOnScreen = function(){
 //Chasseur Ennemie 
 
 
-var arrayEnnemyEC = [],
-    posShipX = -50,   // position par défaut
+var arrayEnnemyEC = [], // array de tout les ennemis
+    posShipX = 500,   // position par défaut
     posShipY = -50
 
 var ShipEnnemyChasseur = function(posShipX, posShipY){ // function constructeur chasseur ennemi 
@@ -93,7 +97,7 @@ var ShipEnnemyChasseur = function(posShipX, posShipY){ // function constructeur 
             ctx.fillRect(this.cordXEC, this.cordYEC, this.life, 3 );
             ctx.fillStyle= "#ff0000"; 
         } 
-        this.cordXEC +=1;
+        
         this.cordYEC +=1.5;
     };
 
@@ -142,26 +146,87 @@ var ShipEnnemyChasseur = function(posShipX, posShipY){ // function constructeur 
     }
 }
 
+var arrayEnnemyT = [], // array de tout les tanker
+    posTankX = 150,
+    posTankY = -75
+
+var ShipEnnemyTank = function(posTankX, posTankY){ // function constructeur chasseur ennemi 
+    this.imgT = new Image();
+    this.imgT.src = './assets/files/PixelSpaceships/tankbase_02.png';
+    this.life = 50;
+    this.cordX = posTankX;
+    this.cordY = posTankY;
+    this.arrayLaserEC = [];
+    
+    this.drawEC = function(){ 
+        ctx.drawImage(this.imgT, this.cordX, this.cordY);
+        if(this.life < 50){
+            ctx.fillRect(this.cordX, this.cordY, this.life, 3 );
+            ctx.fillStyle= "#ff0000"; 
+        } 
+        this.cordX +=0;
+        this.cordY +=1;
+    };
+
+    this.drawLaserEC = {
+        cordXLaserEC : 0,
+        cordYLaserEC : 0,
+    
+        drawShotEC : function(){
+            ctx.drawImage(bulletEnnemy, this.cordXLaserEC, this.cordYLaserEC);
+            this.cordYLaserEC += 10
+        }
+    }
+    
+    this.pushLaserEC = function(){
+        /**
+        Object.create(prototypeDeObjetACreer, objetDeDefinitionDeProprietes)
+        prototypeDeObjetACreer : est l'objet qui sera le prototype de l'objet créé
+        objetDeDefinitionDeProprietes: objet telle que décrit dans la doc qui décrit la nature des propriétés propres de l'objet à créer
+        **/
+    
+        // Ici on ajoute dans le tableau un objet qui à pour prototype this.drawLaserEC et qui a pour propriété propres cordXLaserEC avec la valeur indiquée et cordYLaserEC avec la valeur indiquée.
+        this.arrayLaserEC.push(Object.create(this.drawLaserEC, {
+          cordXLaserEC: {
+            value: this.cordX + 20,
+            configurable: true,
+            enumerable: true,
+            writable: true
+          },
+          cordYLaserEC: {
+            value: this.cordY + 45,
+            configurable: true,
+            enumerable: true,
+            writable: true
+          }
+        }));
+    }
+
+    this.laserOnScreenEC = function(){
+        for(i=0; i<this.arrayLaserEC.length; i++){
+            this.arrayLaserEC[i].drawShotEC(); 
+
+            if(this.arrayLaserEC[i].cordYLaserEC >= 600){
+                this.arrayLaserEC.splice([i], 1); 
+            }
+        }
+    }
+}
+
 
 /*******************************GESTION DE JEU */
 
 
-var countProdEnnemyEC = 0; 
+var countProdEnnemyEC = 0,
+    countLaserEC = 0
 
 var gestionEnnemyEc = function (){
 
     if( arrayEnnemyEC.length < 5){
-        console.log("posShipX ----"+posShipX+"  posShipY -------"+posShipY );
-        arrayEnnemyEC.push(new ShipEnnemyChasseur(posShipX, posShipY));
-        posShipX = Math.random()*posShipX - 80;
-        posShipY = Math.random()*posShipY - 100;
+        arrayEnnemyEC.push(new ShipEnnemyChasseur( Math.random()*posShipX, posShipY));
         countProdEnnemyEC +=1; 
-        //console.log(countProdEnnemyEC); 
         if(countProdEnnemyEC == 5){
-            posShipX = -80;
-            posShipY = -80;
             countProdEnnemyEC = 0;
-            //console.log("posShipX ----"+posShipX+"  posShipY -------"+posShipY ); 
         }
     }
     
@@ -174,24 +239,65 @@ var gestionEnnemyEc = function (){
         if(arrayEnnemyEC[i].cordYEC >= 600){
             arrayEnnemyEC.splice([i], 1); 
         }
-        //console.log(arrayEnnemyEC[i]);
 
         if(arrayEnnemyEC[i].arrayLaserEC.length < 5){
 
-            countLaser+=1; 
-            if(countLaser == 30 ){
+            countLaserEC+=1; 
+            if(countLaserEC == 30 ){
                 arrayEnnemyEC[i].pushLaserEC();
-                //countLaser+=1;
-                
             }
-            if(countLaser > 30){
-                countLaser = 0; 
+            if(countLaserEC > 30){
+                countLaserEC = 0; 
             }
 
         }
 
         for (y=0; y<arrayEnnemyEC[i].arrayLaserEC.length; y++){
             arrayEnnemyEC[i].laserOnScreenEC(); 
+        }
+    }
+}
+
+var countProdEnnemyTank = 0,
+    countLaserTank = 0
+
+var gestionEnnemyTank = function (){
+    if( arrayEnnemyT.length <= 0){
+        arrayEnnemyT.push(new ShipEnnemyTank(posTankX, posTankY)); // création du vaiseau  
+    }
+    
+    for (var i=0; i < arrayEnnemyT.length; i++){
+        arrayEnnemyT[i].drawEC(); // annimer tout les ennemis du tableau
+
+        if(arrayEnnemyT[i].cordY >= 600){ // détection de sorti en Y du canvas
+            arrayEnnemyT.splice([i], 1); // suppression du tableau
+        }
+
+        if (arrayEnnemyT <= 0){
+            gestionEnnemyTank(); 
+        }
+
+        
+        countLaserTank+=1; 
+        if(countLaserTank == 50 ){
+            arrayEnnemyT[i].pushLaserEC();
+            arrayEnnemyT[i].pushLaserEC(); 
+            arrayEnnemyT[i].pushLaserEC(); 
+            arrayEnnemyT[i].pushLaserEC();
+            arrayEnnemyT[i].pushLaserEC();  
+        }
+        if(countLaserTank > 50){
+            countLaserTank = 0; 
+        }
+            
+
+        
+    }
+    
+    for (var i=0; i < arrayEnnemyT.length; i++){
+       
+        for (y=0; y<arrayEnnemyT[i].arrayLaserEC.length; y++){
+            arrayEnnemyT[i].laserOnScreenEC(); 
             //console.log(arrayEnnemyEC[i]); 
         }
     }
@@ -211,7 +317,7 @@ var colision = function(){
                 }
                 
                 arrayLaser.splice([f], 1); 
-                console.log('touché !!!!'); 
+                //console.log('touché !!!!'); 
             }
         }
     }
@@ -222,8 +328,13 @@ var colision = function(){
 /********************************************************************/
 
 var init = function(){ // Initialisation du canvas
-    canvas = document.querySelector('canvas'); 
+    canvas = document.querySelector('canvas');
     ctx = canvas.getContext('2d');
+    heightCanvas = window.innerHeight;
+    widthCanvas = window.innerWidth; 
+    ctx.canvas.height =heightCanvas- 2;
+    ctx.canvas.width= widthCanvas - 2;
+    alert(navigator.userAgent); 
     backgroundCanvasBack = new Image(); 
     backgroundCanvasBack.src = './assets/files/Background/Nebula Aqua-Pink.png';
     shipPlayerImg = new Image();
@@ -232,8 +343,7 @@ var init = function(){ // Initialisation du canvas
     bulletPlayer.src = './assets/files/Blue/bullet2.png';
     bulletEnnemy = new Image(); 
     bulletEnnemy.src = './assets/files/Red/bullet_red2.png';  
-    console.log(shipPlayerImg); 
-    pushLaser(); 
+    //console.log(shipPlayerImg);  
     moteurJeux(); // function récurcive 
 }
 
@@ -241,9 +351,10 @@ var moteurJeux = function(){
     clearRect();
     backgroundGame();
     shipPlayer();
+    gestionEnnemyEc();
+    gestionEnnemyTank(); 
     pushLaser(); 
     laserOnScreen();
-    gestionEnnemyEc();
     colision();
     
     //console.log(arrayEnnemyEC); 
