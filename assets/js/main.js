@@ -1,7 +1,7 @@
 // Variable Global du jeu 
 var canvas,
     ctx,
-    heightCanvas = window.innerHeight, 
+    heightCanvas = window.innerHeight -2, 
     widthCanvas,
     backgroundBackY = 0, 
     backgroundBackY2 = -4096,
@@ -381,7 +381,7 @@ canvas.addEventListener('mousemove', function(evt){
     //console.log(shipPlayerCordY);  
 })
 
-canvas.addEventListener('touchmouve', function(evt){ 
+canvas.addEventListener('touchmove', function(evt){ 
     shipPlayerCordX = evt.clientX - canvas.offsetLeft - shipPlayerH/2;  
     shipPlayerCordY = evt.clientY - canvas.offsetTop - shipPlayerW/2; 
     //console.log(shipPlayerCordY);  
