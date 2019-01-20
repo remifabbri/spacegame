@@ -148,7 +148,7 @@ var ShipEnnemyChasseur = function(posShipX, posShipY){ // function constructeur 
         for(i=0; i<this.arrayLaserEC.length; i++){
             this.arrayLaserEC[i].drawShotEC(); 
 
-            if(this.arrayLaserEC[i].cordYLaserEC >= 600){
+            if(this.arrayLaserEC[i].cordYLaserEC >= heightCanvas){
                 this.arrayLaserEC.splice([i], 1); 
             }
         }
@@ -156,14 +156,14 @@ var ShipEnnemyChasseur = function(posShipX, posShipY){ // function constructeur 
 }
 
 var arrayEnnemyT = [], // array de tout les tanker
-    posTankX = 150,
+    posTankX = widthCanvas/2,
     posTankY = -75
 
 var ShipEnnemyTank = function(posTankX, posTankY){ // function constructeur chasseur ennemi 
     this.imgT = new Image();
     this.imgT.src = './assets/files/PixelSpaceships/tankbase_02.png';
     this.life = 50;
-    this.cordX = posTankX;
+    this.cordX = Math.random()*posTankX+posTankX/4;
     this.cordY = posTankY;
     this.arrayLaserEC = [];
     
@@ -215,7 +215,7 @@ var ShipEnnemyTank = function(posTankX, posTankY){ // function constructeur chas
         for(i=0; i<this.arrayLaserEC.length; i++){
             this.arrayLaserEC[i].drawShotEC(); 
 
-            if(this.arrayLaserEC[i].cordYLaserEC >= 600){
+            if(this.arrayLaserEC[i].cordYLaserEC >= heightCanvas){
                 this.arrayLaserEC.splice([i], 1); 
             }
         }
@@ -247,7 +247,7 @@ var gestionEnnemyEc = function (){
     
     for (var i=0; i < arrayEnnemyEC.length; i++){
        
-        if(arrayEnnemyEC[i].cordYEC >= 600){
+        if(arrayEnnemyEC[i].cordYEC >= heightCanvas){
             arrayEnnemyEC.splice([i], 1); 
         }
 
@@ -280,7 +280,7 @@ var gestionEnnemyTank = function (){
     for (var i=0; i < arrayEnnemyT.length; i++){
         arrayEnnemyT[i].drawEC(); // annimer tout les ennemis du tableau
 
-        if(arrayEnnemyT[i].cordY >= 600){ // détection de sorti en Y du canvas
+        if(arrayEnnemyT[i].cordY >= heightCanvas){ // détection de sorti en Y du canvas
             arrayEnnemyT.splice([i], 1); // suppression du tableau
         }
 
@@ -388,7 +388,7 @@ canvas.addEventListener("touchmove", function (e) {
     var touch = e.touches[0];
     var mouseEvent = new MouseEvent("mousemove", {
       clientX: touch.clientX,
-      clientY: touch.clientY
+      clientY: touch.clientY -25
     });
     canvas.dispatchEvent(mouseEvent);
   }, false);
