@@ -226,31 +226,38 @@ var ShipEnnemyTank = function(posTankX, posTankY){ // function constructeur chas
 /*******************************GESTION DE JEU */
 
 
-var countProdEnnemyEC = 0,
+var tableEnnemyCommune = [],
+    tableShotEnnemyCommue,
+    countProdEnnemyEC = 0,
     countLaserEC = 0
 
-var gestionEnnemyEc = function (){
+var gestionEnnemy = function (){
 
+    // création des ennemy 
     if( arrayEnnemyEC.length < 5){
         arrayEnnemyEC.push(new ShipEnnemyChasseur( Math.random()*posShipX, posShipY));
-        
         countProdEnnemyEC +=1; 
+
         if(countProdEnnemyEC == 5){
             countProdEnnemyEC = 0;
         }
-         
     }
-    
-    for (var i=0; i < arrayEnnemyEC.length; i++){
-        arrayEnnemyEC[i].drawEC();
+    if( arrayEnnemyT.length <= 0){
+        arrayEnnemyT.push(new ShipEnnemyTank(posTankX, posTankY)); // création du vaiseau  
     }
-    
-    for (var i=0; i < arrayEnnemyEC.length; i++){
-       
-        if(arrayEnnemyEC[i].cordYEC >= heightCanvas){
-            arrayEnnemyEC.splice([i], 1); 
-        }
 
+    // communtativité des tableau pour un traitement generale
+
+    tableEnnemyCommune = arrayEnnemyEC.concat(arrayEnnemyT); 
+    
+    for (var i=0; i < tableEnnemyCommune.length; i++){
+        tableEnnemyCommune[i].drawEC();
+    }
+    
+    // création des trire ennemy 
+     
+    for (var i=0; i < arrayEnnemyEC.length; i++){ // création shot EC
+       
         if(arrayEnnemyEC[i].arrayLaserEC.length < 5){
 
             countLaserEC+=1; 
@@ -260,35 +267,16 @@ var gestionEnnemyEc = function (){
             if(countLaserEC > 30){
                 countLaserEC = 0; 
             }
-
         }
-
-        for (y=0; y<arrayEnnemyEC[i].arrayLaserEC.length; y++){
-            arrayEnnemyEC[i].laserOnScreenEC(); 
-        }
+        tableShotEnnemyCommue = (arrayEnnemyEC[i].arrayLaserEC).concat(arrayEnnemyEC[i].arrayLaserEC);
     }
-}
 
-var countProdEnnemyTank = 0,
-    countLaserTank = 0
-
-var gestionEnnemyTank = function (){
-    if( arrayEnnemyT.length <= 0){
-        arrayEnnemyT.push(new ShipEnnemyTank(posTankX, posTankY)); // création du vaiseau  
-    }
-    
-    for (var i=0; i < arrayEnnemyT.length; i++){
-        arrayEnnemyT[i].drawEC(); // annimer tout les ennemis du tableau
-
-        if(arrayEnnemyT[i].cordY >= heightCanvas){ // détection de sorti en Y du canvas
-            arrayEnnemyT.splice([i], 1); // suppression du tableau
-        }
+    for (var i=0; i < arrayEnnemyT.length; i++){ // création shot Tank
 
         if (arrayEnnemyT <= 0){
-            gestionEnnemyTank(); 
+            gestionEnnemy(); // peut-etre mettre un retrun ici !!!!
         }
 
-        
         countLaserTank+=1; 
         if(countLaserTank == 50 ){
             arrayEnnemyT[i].pushLaserEC();
@@ -300,10 +288,32 @@ var gestionEnnemyTank = function (){
         if(countLaserTank > 50){
             countLaserTank = 0; 
         }
-            
+        tableShotEnnemyCommue = tableShotEnnemyCommue.concat( arrayEnnemyT[i].arrayLaserEC); 
+
+    }
+    console.log(tableShotEnnemyCommue); 
+    for (y=0; y<tableShotEnnemyCommue.length; y++){
+        tableShotEnnemyCommue[i].drawShotEC(); 
+    }
+/*
+        if(arrayEnnemyEC[i].cordYEC >= heightCanvas){
+            arrayEnnemyEC.splice([i], 1); 
+        }
+        if(arrayEnnemyT[i].cordY >= heightCanvas){ // détection de sorti en Y du canvas
+            arrayEnnemyT.splice([i], 1); // suppression du tableau
+        }*/
 
         
-    }
+    
+}
+
+var countProdEnnemyTank = 0,
+    countLaserTank = 0
+
+var gestionEnnemyTank = function (){
+    
+    
+    
     
     for (var i=0; i < arrayEnnemyT.length; i++){
        
@@ -361,8 +371,7 @@ var moteurJeux = function(){
     clearRect();
     backgroundGame();
     shipPlayer();
-    gestionEnnemyEc();
-    gestionEnnemyTank(); 
+    gestionEnnemy();  
     pushLaser(); 
     laserOnScreen();
     colision();
