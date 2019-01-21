@@ -47,7 +47,8 @@ var shipPlayerCordX,
     shipPlayerW = 40,
     bulletPlayer, 
     arrayLaser = [],
-    countLaserPlayer = 0
+    countLaserPlayer = 0,
+    life = 3
 
 var shipPlayer = function(){ //function qui dessine le vaisseau du joueur sur le canvas 
     ctx.drawImage(shipPlayerImg, shipPlayerCordX, shipPlayerCordY);
@@ -56,7 +57,8 @@ var shipPlayer = function(){ //function qui dessine le vaisseau du joueur sur le
 var pushLaser = function(){
     countLaserPlayer += 1;
     if(countLaserPlayer >= 2){
-        arrayLaser.push(new Laser(shipPlayerCordX, shipPlayerCordY));
+        arrayLaser.push(new Laser(shipPlayerCordX-10, shipPlayerCordY+10));
+        arrayLaser.push(new Laser(shipPlayerCordX+10, shipPlayerCordY+10));
         countLaserPlayer = 0; 
     }
 }
@@ -80,6 +82,11 @@ var laserOnScreen = function(){
         }
     }
 }
+
+function countLife(){
+    life -=1; 
+}
+
 /********************************************************************
 ******* Vaisseaux Ennemis *******************************************
 ********************************************************************/
@@ -288,7 +295,6 @@ var gestionEnnemyTank = function (){
             gestionEnnemyTank(); 
         }
 
-        
         countLaserTank+=1; 
         if(countLaserTank == 50 ){
             arrayEnnemyT[i].pushLaserEC();
@@ -300,8 +306,6 @@ var gestionEnnemyTank = function (){
         if(countLaserTank > 50){
             countLaserTank = 0; 
         }
-            
-
         
     }
     
@@ -318,7 +322,6 @@ var colision = function(){
     // Gestion des colision des laser du joueur avec les chasseursEnnemy
     for(var f=0; f<arrayLaser.length-2; f++){ // Parcour la table des lasers du joueur (-2 sur le length permet d'eviter le bug (cordXLaser is not defined))
         for(var g=0; g < arrayEnnemyEC.length; g++){ //Parcour la table des chasseursEnnemy 
-            //console.log(arrayLaser[f].cordXLaser); 
 
             if(arrayLaser[f].cordXLaser > arrayEnnemyEC[g].cordXEC && arrayLaser[f].cordXLaser < arrayEnnemyEC[g].cordXEC + 43  && arrayLaser[f].cordYLaser > arrayEnnemyEC[g].cordYEC  && arrayLaser[f].cordYLaser < arrayEnnemyEC[g].cordYEC + 50){
                 arrayEnnemyEC[g].life -= 5; 
@@ -327,14 +330,50 @@ var colision = function(){
                     score = score + 10;
                 }
                 
-                arrayLaser.splice([f], 1); 
-                //console.log('touché !!!!'); 
+                arrayLaser.splice([f], 1);  
             }
         }
     }
+    for(var f=0; f<arrayLaser.length-2; f++){ // Parcour la table des lasers du joueur (-2 sur le length permet d'eviter le bug (cordXLaser is not defined))
+        for(var g=0; g < arrayEnnemyT.length; g++){ //Parcour la table des chasseursEnnemy  
+
+            if(arrayLaser[f].cordXLaser > arrayEnnemyT[g].cordX && arrayLaser[f].cordXLaser < arrayEnnemyT[g].cordX + 43  && arrayLaser[f].cordYLaser > arrayEnnemyT[g].cordY  && arrayLaser[f].cordYLaser < arrayEnnemyT[g].cordY + 50){
+                arrayEnnemyT[g].life -= 1; 
+                if(arrayEnnemyT[g].life <= 0){
+                    arrayEnnemyT.splice([g], 1);
+                    score = score + 10;
+                }
+
+                arrayLaser.splice([f], 1); 
+            }
+        }
+    }
+    var shipPlayerCordXW = shipPlayerCordX + 43,
+        shipPlayerCordYH = shipPlayerCordY + 40;
+    for(var f=0; f<arrayEnnemyEC.length; f++){
+        if (shipPlayerCordX > arrayEnnemyEC[f].cordXEC && shipPlayerCordX < arrayEnnemyEC[f].cordXEC + 43 && shipPlayerCordY > arrayEnnemyEC[f].cordYEC && shipPlayerCordY < arrayEnnemyEC[f].cordYEC + 40) {
+            console.log(life +"      aaaaaaaaaaaaaiiiiiiiiiiiiiiiieeeeee");
+            arrayEnnemyEC.splice([f], 1); 
+            return countLife();
+            
+        }
+        if (shipPlayerCordXW < arrayEnnemyEC[f].cordXEC + 43 && shipPlayerCordXW > arrayEnnemyEC[f].cordXEC && shipPlayerCordY > arrayEnnemyEC[f].cordYEC && shipPlayerCordY < arrayEnnemyEC[f].cordYEC + 40) {
+            console.log(life +"      aaaaaaaaaaaaaiiiiiiiiiiiiiiiieeeeee");
+            arrayEnnemyEC.splice([f], 1);            
+            return countLife(); 
+        }
+        if (shipPlayerCordYH > arrayEnnemyEC[f].cordYEC && shipPlayerCordYH < arrayEnnemyEC[f].cordYEC + 40 && shipPlayerCordX > arrayEnnemyEC[f].cordXEC && shipPlayerCordX < arrayEnnemyEC[f].cordXEC + 43) {
+            console.log(life +"      aaaaaaaaaaaaaiiiiiiiiiiiiiiiieeeeee");
+            arrayEnnemyEC.splice([f], 1);            
+            return countLife(); 
+        }
+        if (shipPlayerCordYH > arrayEnnemyEC[f].cordYEC && shipPlayerCordYH < arrayEnnemyEC[f].cordYEC + 40 && shipPlayerCordXW < arrayEnnemyEC[f].cordXEC + 43 && shipPlayerCordXW > arrayEnnemyEC[f].cordXEC) {
+            console.log(life +"      aaaaaaaaaaaaaiiiiiiiiiiiiiiiieeeeee");
+            arrayEnnemyEC.splice([f], 1);            
+            return countLife(); 
+        }
+    }
 }
-
-
 
 /********************************************************************/
 
