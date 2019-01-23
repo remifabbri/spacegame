@@ -11,7 +11,10 @@ var canvas,
     timer,
     timerLaser,
     countLaserTank= 0, 
-    score = 0
+    score = 0, 
+    life = 3, 
+    alive = true, 
+    start = false 
 
     if (window.innerWidth > 992){
         widthCanvas = window.innerWidth/2;
@@ -38,6 +41,33 @@ var backgroundGame = function(){
     backgroundBackY2 += 0.5; 
 }
 
+var countLife = function (){
+    life -=1;
+    if(life === 0){
+        alive = false;
+        blockPortfolio.style = "display:block; width:"+widthCanvas+"px;";; 
+        btnStart.style = "display:block";
+        btnStart.innerHtml = "Retournez au combat !"; 
+    }
+}
+
+var affichageHUD = function(){
+    ctx.font = "20px Arial";
+    ctx.fillText('vie:', 20, 25); 
+    ctx.fillText(life, 60, 25);
+    ctx.fillText('score:',widthCanvas-150, 25);
+    ctx.fillText(score,widthCanvas-90, 25);
+}
+
+
+
+var startPlay = function(){
+    start = true;
+    btnStart.style = "display: none;";
+    life = 3; 
+    alive = true; 
+}
+
 // vaisseau du joueur -----------------------------------
 
 // varaible Global joueur
@@ -47,8 +77,8 @@ var shipPlayerCordX,
     shipPlayerW = 40,
     bulletPlayer, 
     arrayLaser = [],
-    countLaserPlayer = 0,
-    life = 3
+    countLaserPlayer = 0
+    
 
 var shipPlayer = function(){ //function qui dessine le vaisseau du joueur sur le canvas 
     ctx.drawImage(shipPlayerImg, shipPlayerCordX, shipPlayerCordY);
@@ -83,9 +113,7 @@ var laserOnScreen = function(){
     }
 }
 
-function countLife(){
-    life -=1; 
-}
+
 
 /********************************************************************
 ******* Vaisseaux Ennemis *******************************************
@@ -306,11 +334,9 @@ var gestionEnnemyTank = function (){
         if(countLaserTank > 50){
             countLaserTank = 0; 
         }
-        
     }
     
     for (var i=0; i < arrayEnnemyT.length; i++){
-       
         for (y=0; y<arrayEnnemyT[i].arrayLaserEC.length; y++){
             arrayEnnemyT[i].laserOnScreenEC(); 
             //console.log(arrayEnnemyEC[i]); 
@@ -352,23 +378,18 @@ var colision = function(){
         shipPlayerCordYH = shipPlayerCordY + 40;
     for(var f=0; f<arrayEnnemyEC.length; f++){
         if (shipPlayerCordX > arrayEnnemyEC[f].cordXEC && shipPlayerCordX < arrayEnnemyEC[f].cordXEC + 43 && shipPlayerCordY > arrayEnnemyEC[f].cordYEC && shipPlayerCordY < arrayEnnemyEC[f].cordYEC + 40) {
-            console.log(life +"      aaaaaaaaaaaaaiiiiiiiiiiiiiiiieeeeee");
             arrayEnnemyEC.splice([f], 1); 
             return countLife();
-            
         }
         if (shipPlayerCordXW < arrayEnnemyEC[f].cordXEC + 43 && shipPlayerCordXW > arrayEnnemyEC[f].cordXEC && shipPlayerCordY > arrayEnnemyEC[f].cordYEC && shipPlayerCordY < arrayEnnemyEC[f].cordYEC + 40) {
-            console.log(life +"      aaaaaaaaaaaaaiiiiiiiiiiiiiiiieeeeee");
             arrayEnnemyEC.splice([f], 1);            
             return countLife(); 
         }
         if (shipPlayerCordYH > arrayEnnemyEC[f].cordYEC && shipPlayerCordYH < arrayEnnemyEC[f].cordYEC + 40 && shipPlayerCordX > arrayEnnemyEC[f].cordXEC && shipPlayerCordX < arrayEnnemyEC[f].cordXEC + 43) {
-            console.log(life +"      aaaaaaaaaaaaaiiiiiiiiiiiiiiiieeeeee");
             arrayEnnemyEC.splice([f], 1);            
             return countLife(); 
         }
         if (shipPlayerCordYH > arrayEnnemyEC[f].cordYEC && shipPlayerCordYH < arrayEnnemyEC[f].cordYEC + 40 && shipPlayerCordXW < arrayEnnemyEC[f].cordXEC + 43 && shipPlayerCordXW > arrayEnnemyEC[f].cordXEC) {
-            console.log(life +"      aaaaaaaaaaaaaiiiiiiiiiiiiiiiieeeeee");
             arrayEnnemyEC.splice([f], 1);            
             return countLife(); 
         }
@@ -399,12 +420,16 @@ var init = function(){ // Initialisation du canvas
 var moteurJeux = function(){
     clearRect();
     backgroundGame();
-    shipPlayer();
-    gestionEnnemyEc();
-    gestionEnnemyTank(); 
-    pushLaser(); 
-    laserOnScreen();
-    colision();
+    if(alive && start && life > 0){
+        affichageHUD(); 
+        shipPlayer();
+        gestionEnnemyEc();
+        gestionEnnemyTank(); 
+        pushLaser(); 
+        laserOnScreen();
+        colision();
+    }
+    
     
     //console.log(arrayEnnemyEC); 
     //console.log(arrayEnnemyEC.arrayLaserEC);
@@ -422,7 +447,6 @@ canvas.addEventListener('mousemove', function(evt){
     //console.log(shipPlayerCordY);  
 })
 
-
 canvas.addEventListener("touchmove", function (e) {
     var touch = e.touches[0];
     var mouseEvent = new MouseEvent("mousemove", {
@@ -432,3 +456,13 @@ canvas.addEventListener("touchmove", function (e) {
     canvas.dispatchEvent(mouseEvent);
   }, false);
 
+  var btnStart = document.querySelector('.btnStart'); 
+  btnStart.addEventListener('click', function(){
+      startPlay();
+      blockPortfolio.style = "display:none";
+  })
+
+  var blockPortfolio = document.querySelector('.blockPortfolio');
+  blockPortfolio.style = "width:"+widthCanvas+"px;";
+  var pxLeft=canvas.offsetLeft; 
+  btnStart.style = "left:"+pxLeft+"px; width:"+widthCanvas+"px; "; 
