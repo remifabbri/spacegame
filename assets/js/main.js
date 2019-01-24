@@ -47,7 +47,8 @@ var countLife = function (){
         alive = false;
         blockPortfolio.style = "display:block; width:"+widthCanvas+"px;";; 
         btnStart.style = "display:block";
-        btnStart.innerHtml = "Retournez au combat !"; 
+        btnStart.innerHtml = "Retournez au combat !";
+        btnStart.style = "left:"+pxLeft+"px; width:"+widthCanvas+"px; ";  
     }
 }
 
@@ -360,6 +361,7 @@ var colision = function(){
             }
         }
     }
+    
     for(var f=0; f<arrayLaser.length-2; f++){ // Parcour la table des lasers du joueur (-2 sur le length permet d'eviter le bug (cordXLaser is not defined))
         for(var g=0; g < arrayEnnemyT.length; g++){ //Parcour la table des chasseursEnnemy  
 
@@ -374,6 +376,7 @@ var colision = function(){
             }
         }
     }
+
     var shipPlayerCordXW = shipPlayerCordX + 43,
         shipPlayerCordYH = shipPlayerCordY + 40;
     for(var f=0; f<arrayEnnemyEC.length; f++){
@@ -408,7 +411,7 @@ var init = function(){ // Initialisation du canvas
     backgroundCanvasBack = new Image(); 
     backgroundCanvasBack.src = './assets/files/Background/Nebula Aqua-Pink.png';
     shipPlayerImg = new Image();
-    shipPlayerImg.src = './assets/files/PixelSpaceships/blue_05.png'; 
+    shipPlayerImg.src = './assets/files/PixelSpaceships/PlayerShip.png'; 
     bulletPlayer = new Image(); 
     bulletPlayer.src = './assets/files/Blue/bullet2.png';
     bulletEnnemy = new Image(); 
@@ -462,6 +465,7 @@ canvas.addEventListener("touchmove", function (e) {
       blockPortfolio.style = "display:none";
   })
 
+  
   var blockPortfolio = document.querySelector('.blockPortfolio');
   blockPortfolio.style = "width:"+widthCanvas+"px;";
   var pxLeft=canvas.offsetLeft; 
