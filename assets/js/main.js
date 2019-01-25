@@ -21,6 +21,7 @@ var canvas,
     }else{
         widthCanvas = window.innerWidth;
     }
+var btnStart = document.querySelector('.btnStart'); 
 
 var clearRect = function(){
     ctx.clearRect(0,0,widthCanvas, heightCanvas); 
@@ -45,9 +46,12 @@ var countLife = function (){
     life -=1;
     if(life === 0){
         alive = false;
-        blockPortfolio.style = "display:block; width:"+widthCanvas+"px;";; 
+        blockPortfolio.style = "display:block; width:"+widthCanvas+"px;";
+        blockPortfolio.classList.remove("upBlockMain"); 
+        blockPortfolio.classList.remove("hide"); 
+        blockPortfolio.classList.add("initTop"); 
         btnStart.style = "display:block";
-        btnStart.innerHtml = "Retournez au combat !";
+        btnStart.textContent = "Retournez au combat !";
         btnStart.style = "left:"+pxLeft+"px; width:"+widthCanvas+"px; ";  
     }
 }
@@ -405,7 +409,7 @@ var init = function(){ // Initialisation du canvas
     canvas = document.querySelector('canvas');
     ctx = canvas.getContext('2d');
     
-    ctx.canvas.width= widthCanvas;
+    ctx.canvas.width= widthCanvas-2;
     ctx.canvas.height =heightCanvas;
 
     backgroundCanvasBack = new Image(); 
@@ -459,10 +463,17 @@ canvas.addEventListener("touchmove", function (e) {
     canvas.dispatchEvent(mouseEvent);
   }, false);
 
-  var btnStart = document.querySelector('.btnStart'); 
+  function hide(){
+    blockPortfolio.classList.add('hide');  
+  }
+
+  
   btnStart.addEventListener('click', function(){
       startPlay();
-      blockPortfolio.style = "display:none";
+      //blockPortfolio.style = "display:none";
+      blockPortfolio.classList.remove('initTop'); 
+      blockPortfolio.classList.add('upBlockMain'); 
+      setTimeout(hide, 700);  
   })
 
   
