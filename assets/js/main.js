@@ -277,8 +277,7 @@ var gestionEnnemyEc = function (){
         countProdEnnemyEC +=1; 
         if(countProdEnnemyEC == 5){
             countProdEnnemyEC = 0;
-        }
-         
+        } 
     }
     
     for (var i=0; i < arrayEnnemyEC.length; i++){
@@ -350,6 +349,7 @@ var gestionEnnemyTank = function (){
 }
 
 var colision = function(){
+
     // Gestion des colision des laser du joueur avec les chasseursEnnemy
     for(var f=0; f<arrayLaser.length-2; f++){ // Parcour la table des lasers du joueur (-2 sur le length permet d'eviter le bug (cordXLaser is not defined))
         for(var g=0; g < arrayEnnemyEC.length; g++){ //Parcour la table des chasseursEnnemy 
@@ -381,6 +381,8 @@ var colision = function(){
         }
     }
 
+
+    // colision Ennemy chasseur 
     var shipPlayerCordXW = shipPlayerCordX + 43,
         shipPlayerCordYH = shipPlayerCordY + 40;
     for(var f=0; f<arrayEnnemyEC.length; f++){
@@ -400,7 +402,50 @@ var colision = function(){
             arrayEnnemyEC.splice([f], 1);            
             return countLife(); 
         }
+        
     }
+
+    for( var Ec =0; Ec < arrayEnnemyEC.length; Ec++ ){
+        for( var c = 0; c < arrayEnnemyEC[Ec].arrayLaserEC.length; c++){
+            
+            if(arrayEnnemyEC[Ec].arrayLaserEC[c].cordXLaserEC < shipPlayerCordX+25
+                && arrayEnnemyEC[Ec].arrayLaserEC[c].cordXLaserEC + 8 > shipPlayerCordX +25
+                && arrayEnnemyEC[Ec].arrayLaserEC[c].cordYLaserEC < shipPlayerCordY+15 
+                && arrayEnnemyEC[Ec].arrayLaserEC[c].cordYLaserEC+13 > shipPlayerCordY  ){
+                
+                countLife();
+                arrayEnnemyEC[Ec].arrayLaserEC.splice([c], 1); 
+
+            }
+        }
+    }
+
+    // colision Ennemy Tank
+    for(var f=0; f<arrayEnnemyT.length; f++){
+        if(arrayEnnemyT[f].cordX < shipPlayerCordX+40
+            && arrayEnnemyT[f].cordX + 40 > shipPlayerCordX
+            && arrayEnnemyT[f].cordY < shipPlayerCordY+ 45
+            && arrayEnnemyT[f].cordY + 40 > shipPlayerCordY  ){
+            
+            countLife();
+            arrayEnnemyT.splice([f], 1); 
+
+        }
+    }
+    for( var Ec =0; Ec < arrayEnnemyT.length; Ec++ ){
+        for( var c = 0; c < arrayEnnemyT[Ec].arrayLaserEC.length; c++){
+            
+            if(arrayEnnemyT[Ec].arrayLaserEC[c].cordXLaserEC < shipPlayerCordX+25
+                && arrayEnnemyT[Ec].arrayLaserEC[c].cordXLaserEC + 8 > shipPlayerCordX +25
+                && arrayEnnemyT[Ec].arrayLaserEC[c].cordYLaserEC < shipPlayerCordY+15 
+                && arrayEnnemyT[Ec].arrayLaserEC[c].cordYLaserEC+13 > shipPlayerCordY  ){
+                
+                countLife();
+                arrayEnnemyT[Ec].arrayLaserEC.splice([c], 1); 
+
+            }
+        }
+    }   
 }
 
 /********************************************************************/
@@ -480,4 +525,7 @@ canvas.addEventListener("touchmove", function (e) {
   var blockPortfolio = document.querySelector('.blockPortfolio');
   blockPortfolio.style = "width:"+widthCanvas+"px;";
   var pxLeft=canvas.offsetLeft; 
-  btnStart.style = "left:"+pxLeft+"px; width:"+widthCanvas+"px; "; 
+  btnStart.style = "left:"+pxLeft+"px; width:"+widthCanvas+"px; ";
+  
+  
+
