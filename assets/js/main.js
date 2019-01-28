@@ -485,6 +485,7 @@ var moteurJeux = function(){
     
     //console.log(arrayEnnemyEC); 
     //console.log(arrayEnnemyEC.arrayLaserEC);
+    //requestAnimationFrame(moteurJeux, 1000/60); 
     moteur = setTimeout(moteurJeux, 1000/30); 
 }
 
