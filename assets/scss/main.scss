@@ -83,7 +83,8 @@ canvas{
         align-items: center;
         
         
-        h1,H2{
+        
+        h1,h2{
             font-size: 3vw; 
             color: #0098d3ff; 
             font-weight: bold;
@@ -98,6 +99,62 @@ canvas{
         flex-flow: row nowrap; 
         justify-content: space-between; 
         align-items: center; 
+        color: white;
+
+        span{
+            display: flex;
+            flex-flow: row nowrap; 
+            align-items: center;  
+            margin: 5px 0px; 
+
+            span{
+                margin-right: 5px; 
+            }
+        }
+
+        a{
+            display: flex;
+            flex-flow: row nowrap; 
+            align-items: center;  
+            margin: 5px 0px; 
+            color: white; 
+           
+            span{
+                margin-right: 5px; 
+            } 
+        }
+
+        >div:last-child{
+            display: flex;
+            flex-flow: row nowrap; 
+            align-items:center; 
+
+
+        }
+    }
+}
+
+
+.blockLogoTech{
+
+
+
+    span{
+        display: flex; 
+        flex-flow: row wrap; 
+        align-items: center;
+        justify-content: space-around; 
+
+
+        h3{
+            width: 100%;
+            padding: 5px; 
+            margin: 20px 0px 10px 0px; 
+            color:grey;  
+            text-align: center; 
+            border-bottom: 1px solid grey; 
+
+        }
     }
 }
 
@@ -133,6 +190,169 @@ hr{
     border-color: #0098d3ff;
     box-shadow: 0px 0px 10px 0px rgba(0, 152, 211, .5); 
 }
+
+
+
+.waitScore{
+    display: flex; 
+    flex-flow: row nowrap; 
+    justify-content: space-around; 
+    align-items: center; 
+    border: 1px solid white; 
+    border-radius: 5px;
+    padding: 10px 15px;
+    color: white; 
+    margin: 15px auto;
+
+    .sepVerticale{
+        height: 45px; 
+        width: 2px; 
+        margin: 0px 10px; 
+        background-color: white; 
+    }
+
+}
+
+
+.iconS{
+    height: 15px;
+    width: 15px;
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;  
+}
+
+.iconM{
+    height: 30px;
+    width: 30px;
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;  
+}
+
+
+.iconPhone{
+    background-image: url('../files/icons/phone.svg'); 
+}
+
+.iconEmail{
+    background-image: url('../files/icons/email.svg'); 
+}
+
+.iconLinkedIn{
+    background-image: url('../files/icons/linkedin.svg'); 
+}
+
+.iconLocation{
+    background-image: url('../files/icons/location.svg'); 
+}
+
+.iconCadenas{
+    background-image: url('../files/icons/lock.svg'); 
+}
+
+.iconTech{
+    height: 50px;
+    width: 50px;
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+}
+
+.iconHtml5{
+    background-image: url('../files/icons/iconsLangage/html5.svg'); 
+}
+.iconCSS3{
+    background-image: url('../files/icons/iconsLangage/css3.svg');
+}
+.iconJs{
+    background-image: url('../files/icons/iconsLangage/javascript.svg');
+}
+.iconTypeScript{
+    background-image: url('../files/icons/iconsLangage/typescript.svg');
+}
+.iconNodeJs{
+    background-image: url('../files/icons/iconsLangage/nodejs.svg');
+}
+.iconMongoDb{
+    background-image: url('../files/icons/iconsLangage/mongodb.svg');
+}
+
+
+
+.iconAngular{
+    background-image: url('../files/icons/iconsLangage/angularjs.svg');
+}
+.iconBootstrap{
+    background-image: url('../files/icons/iconsLangage/bootstrap.svg');
+}
+.iconJquery{
+    background-image: url('../files/icons/iconsLangage/jquery.svg');
+}
+
+.iconMeteor{
+    background-image: url('../files/icons/iconsLangage/meteor.svg');
+}
+.iconSass{
+    background-image: url('../files/icons/iconsLangage/sass.svg');
+}
+.iconVueJs{
+    background-image: url('../files/icons/iconsLangage/vuejs.svg');
+}
+
+
+.iconWebpack{
+    background-image: url('../files/icons/iconsLangage/webpack.svg');
+}
+.iconGit{
+    background-image: url('../files/icons/iconsLangage/git.svg');
+}
+.iconGitHub{
+    background-image: url('../files/icons/iconsLangage/github.svg');
+}
+.iconGitLab{
+    background-image: url('../files/icons/iconsLangage/gitlab.svg');
+}
+.iconNPM{
+    background-image: url('../files/icons/iconsLangage/npm.svg');
+}
+
+.iconAws{
+    background-image: url('../files/icons/iconsLangage/aws.svg');
+}
+.iconHeroku{
+    background-image: url('../files/icons/iconsLangage/heroku.svg');
+}
+.iconSSH{
+    background-image: url('../files/icons/iconsLangage/ssh.svg');
+}
+.iconNginx{
+    background-image: url('../files/icons/iconsLangage/nginx.svg');
+}
+
+
+.iconPhotoshop{
+    background-image: url('../files/icons/iconsLangage/photoshop.svg');
+}
+.iconIllustrator{
+    background-image: url('../files/icons/iconsLangage/illustrator.svg');
+}
+.iconGimp{
+    background-image: url('../files/icons/iconsLangage/gimp.svg');
+}
+.iconInkScape{
+    background-image: url('../files/icons/iconsLangage/inkscape.svg');
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
