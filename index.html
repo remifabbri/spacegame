@@ -11,17 +11,29 @@
 </head>
 <body>
     <div class="blockPortfolio">
-        <button class="btnStart" type="button">Défendez la Planète !</button>
+        <button class="btnStart play" type="button"> 
+            <span class="ScoreTotal">Score Total: <span>0000</span></span>
+            <span class="BestScore">Meilleur Score: <span>0000</span></span>  
+        </button>
         <div class="info">
             
             <div class="contact">
                 <div class="prez">
                     <h1>Rémi <br> Fabbri</h1>
-                    <img src="./assets/files/Background/imgProfil.png" alt="photo de profil">
+                    <img name="score0" class="disableScore" src="./assets/files/Background/imgProfil.png" alt="photo de profil">
+                    <img name="Defaultscore0" class="defaultScore" src="./assets/files/imgScoreDefault.png" alt="photo de profil">
                     <h2>Développeur <br>FullStack JS</h2>
                 </div>
-                <hr>
-                <div class="adresse">
+                <div class="sep">
+                    <h2>Contact</h2><span class="lineSep"></span>
+                </div>
+                <div name="Defaultscore0" class="waitScore defaultScore">
+                    <span class="iconM iconCadenas"></span>
+                    <div class="sepVerticale"></div>
+                    <p>Lancer une partie pour découvrir les informations</p>
+                    <button type="button" class="BtnPlay play">JOUER</button>
+                </div>
+                <div name="score0" class="adresse disableScore">
                     <div>
                         <span class="email"><span class="iconS iconEmail"></span> fabbri.remi@gmail.com</span>
 
@@ -44,12 +56,13 @@
         <div class="sep">
             <h2>Langages & Technos</h2><span class="lineSep"></span>
         </div>
-        <div class="waitScore">
+        <div name="Defaultscore0" class="waitScore defaultScore">
             <span class="iconM iconCadenas"></span>
             <div class="sepVerticale"></div>
-            <p>Text Ici : Lancer une parti pour découvrir les informations</p>
+            <p>Lancer une partie pour découvrir les informations</p>
+            <button type="button" class="BtnPlay play">JOUER</button>
         </div>
-        <div class="blockLogoTech">
+        <div name="score0" class="blockLogoTech disableScore">
             <span>
                 <h3>Langages</h3>
                 <div class="iconTech iconHtml5"></div>
@@ -92,8 +105,6 @@
                 <div class="iconTech iconGimp"></div>
                 <div class="iconTech iconInkScape"></div>
             </span>
-            
-            <span><img src="" alt=""></span>
         </div>
         <div class="sep">
             <h2>Expériences Professionnelles</h2><span class="lineSep"></span>

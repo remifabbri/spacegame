@@ -22,12 +22,16 @@ canvas{
 }
 
 .btnStart{
+    display: flex; 
+    flex-flow: column nowrap; 
+    justify-content: flex-end;
+    align-items: flex-end;  
     position: fixed;
     left: 0px;
     border: none; 
     padding: 5px 15px;
     color: white;
-    font-size: 1.5rem;
+    font-size: 1em;
     font-weight: bold; 
     background-color:  #3f3c8a;
     cursor: pointer;
@@ -36,11 +40,12 @@ canvas{
     
     
     &::before{
-        content: url('./../files/PixelSpaceships/PlayerShipRotate.png');  
+        content: '';
+        background: url('./../files/imgBtnJouer.png') center no-repeat;  
         position: absolute; 
         top: 0px; 
-        left: 0px;
-        width: 25%; 
+        left: 0px; 
+        width: 200px;   
         height: 50px; 
         background-color: #635efaff;
         line-height: 50px; 
@@ -137,6 +142,7 @@ canvas{
 
 .blockLogoTech{
 
+    flex-flow: column nowrap; 
 
 
     span{
@@ -198,7 +204,7 @@ hr{
     flex-flow: row nowrap; 
     justify-content: space-around; 
     align-items: center; 
-    border: 1px solid white; 
+    border: 1px solid grey; 
     border-radius: 5px;
     padding: 10px 15px;
     color: white; 
@@ -208,9 +214,23 @@ hr{
         height: 45px; 
         width: 2px; 
         margin: 0px 10px; 
-        background-color: white; 
+        background-color: grey; 
     }
 
+    .BtnPlay{ 
+        padding: 10px 15px; 
+        font-size: 24px;
+        font-weight: bold; 
+        color: white;
+        background-color: #0098d3ff;
+        box-shadow: 0px 0px 10px 0px rgba(0, 152, 211, .5);
+        border: 2px solid #0098d3ff;
+        border-radius: 5px; 
+        
+        &:hover{
+            box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, .5);
+        }
+    }
 }
 
 
@@ -361,6 +381,23 @@ hr{
 
 
 /************************ Class JS Animation *******************/ 
+
+.disableScore{
+    display: none !important; 
+}
+
+.enableScore{
+    display: flex !important; 
+}
+
+.defaultScore{
+    display: flex !important;
+}
+
+
+
+
+
 
 .upBlockMain{
     animation: upMove 1s linear; 

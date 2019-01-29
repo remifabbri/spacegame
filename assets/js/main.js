@@ -11,7 +11,9 @@ var canvas,
     timer,
     timerLaser,
     countLaserTank= 0, 
-    score = 0, 
+    score = 0,
+    bestScore = 0, 
+    totalScore = 0,
     life = 3, 
     alive = true, 
     start = false 
@@ -21,7 +23,10 @@ var canvas,
     }else{
         widthCanvas = window.innerWidth;
     }
-var btnStart = document.querySelector('.btnStart'); 
+var btnStart = document.querySelector('.btnStart');
+var btnPlay = document.querySelectorAll('.play');
+var elTotalScore = document.querySelector('.ScoreTotal span');
+var elBestScore = document.querySelector('.BestScore span'); 
 
 var clearRect = function(){
     ctx.clearRect(0,0,widthCanvas, heightCanvas); 
@@ -51,8 +56,26 @@ var countLife = function (){
         blockPortfolio.classList.remove("hide"); 
         blockPortfolio.classList.add("initTop"); 
         btnStart.style = "display:block";
-        btnStart.textContent = "Retournez au combat !";
-        btnStart.style = "left:"+pxLeft+"px; width:"+widthCanvas+"px; ";  
+        btnStart.style = "left:"+pxLeft+"px; width:"+widthCanvas+"px; ";
+        totalScore = totalScore + score;
+        elTotalScore.textContent = totalScore; 
+        if (score > bestScore){
+            bestScore = score;
+            elBestScore.textContent = bestScore;  
+        }
+        if (totalScore > 0){
+            var DefautlScore0 = document.querySelectorAll('[name="Defaultscore0"]');
+            var Score0 = document.querySelectorAll('[name="score0"]'); 
+
+            for(var b=0; b<DefautlScore0.length; b++){     
+                DefautlScore0[b].classList.remove('defaultScore');
+                DefautlScore0[b].classList.add('disableScore');
+            }
+            for(var b=0; b<Score0.length; b++){
+                Score0[b].classList.remove('disableScore'); 
+                Score0[b].classList.add('enableScore'); 
+            }
+        }
     }
 }
 
@@ -70,7 +93,8 @@ var startPlay = function(){
     start = true;
     btnStart.style = "display: none;";
     life = 3; 
-    alive = true; 
+    alive = true;
+    score = 0; 
 }
 
 // vaisseau du joueur -----------------------------------
@@ -485,8 +509,8 @@ var moteurJeux = function(){
     
     //console.log(arrayEnnemyEC); 
     //console.log(arrayEnnemyEC.arrayLaserEC);
-    //requestAnimationFrame(moteurJeux, 1000/60); 
-    moteur = setTimeout(moteurJeux, 1000/30); 
+    requestAnimationFrame(moteurJeux, 1000/60); 
+    //moteur = setTimeout(moteurJeux, 1000/30); 
 }
 
 init();
@@ -513,14 +537,16 @@ canvas.addEventListener("touchmove", function (e) {
     blockPortfolio.classList.add('hide');  
   }
 
-  
-  btnStart.addEventListener('click', function(){
-      startPlay();
-      //blockPortfolio.style = "display:none";
-      blockPortfolio.classList.remove('initTop'); 
-      blockPortfolio.classList.add('upBlockMain'); 
-      setTimeout(hide, 700);  
-  })
+  for( var p = 0; p < btnPlay.length; p++){
+    btnPlay[p].addEventListener('click', function(){
+        startPlay();
+        //blockPortfolio.style = "display:none";
+        blockPortfolio.classList.remove('initTop'); 
+        blockPortfolio.classList.add('upBlockMain'); 
+        setTimeout(hide, 700);  
+    })
+  }
+ 
 
   
   var blockPortfolio = document.querySelector('.blockPortfolio');
