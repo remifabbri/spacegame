@@ -23,40 +23,74 @@ var canvas,
     }else{
         widthCanvas = window.innerWidth;
     }
+
+
+var timerSprite = 0; 
+
+var changeSprite = function(){ // gestion des sprites Joueur / Ennemies / Asteroids
+    if (timerSprite >= 0 && timerSprite <= 10){
+        shipPlayerImg.src = './assets/files/PixelSpaceships/PlayerShip1.png';
+        for (var s= 0; s<arrayEnnemyEC.length; s++){
+            arrayEnnemyEC[s].imgEC.src = './assets/files/PixelSpaceships/red_03T1.png';
+        }
+        timerSprite ++; 
+    }
+    if (timerSprite > 10 && timerSprite <= 20){
+        shipPlayerImg.src = './assets/files/PixelSpaceships/PlayerShip2.png';
+        for (var s= 0; s<arrayEnnemyEC.length; s++){
+            arrayEnnemyEC[s].imgEC.src = './assets/files/PixelSpaceships/red_03T2.png';
+        }
+        timerSprite ++; 
+    }
+    if (timerSprite > 20 && timerSprite <= 30){
+        shipPlayerImg.src = './assets/files/PixelSpaceships/PlayerShip3.png';
+        for (var s= 0; s<arrayEnnemyEC.length; s++){
+            arrayEnnemyEC[s].imgEC.src = './assets/files/PixelSpaceships/red_03T3.png';
+        }
+        timerSprite ++;
+        if(timerSprite >= 30){
+            timerSprite = 0; 
+        }
+    }
+}
+
+var timerSpritedead = 0; 
+var spritePlayerDead = function(){
+    //console.log(timerSpritedead); 
+    if (timerSpritedead >= 0 && timerSpritedead <= 10 && !alive){
+        shipPlayerImg.src = './assets/files/PixelSpaceships/explosion1.png';
+        timerSpritedead ++; 
+    }
+    if (timerSpritedead > 10 && timerSpritedead <= 20  && !alive){
+        shipPlayerImg.src = './assets/files/PixelSpaceships/explosion2.png';
+        timerSpritedead ++; 
+    }
+    if (timerSpritedead > 20 && timerSpritedead <= 30  && !alive){
+        shipPlayerImg.src = './assets/files/PixelSpaceships/explosion3.png';
+        timerSpritedead ++;
+    }
+    
+}
+// element de controle du lancement du jeu et des blocks CV
 var btnStart = document.querySelector('.btnStart');
 var btnPlay = document.querySelectorAll('.play');
 var elTotalScore = document.querySelector('.ScoreTotal span');
 var elBestScore = document.querySelector('.BestScore span'); 
 
-var clearRect = function(){
-    ctx.clearRect(0,0,widthCanvas, heightCanvas); 
-}
 
-var backgroundGame = function(){
-    ctx.drawImage(backgroundCanvasBack, -1000, backgroundBackY);
-    ctx.drawImage(backgroundCanvasBack, -1000, backgroundBackY2);
-     
-    if(backgroundBackY > 4096){
-        backgroundBackY = -4095.5; 
-    }
-    if(backgroundBackY2 > 4096){
-        backgroundBackY2 = -4095.5; 
-    }
-
-    backgroundBackY += 0.5; 
-    backgroundBackY2 += 0.5; 
-}
 
 var countLife = function (){
     life -=1;
     if(life === 0){
         alive = false;
-        blockPortfolio.style = "display:block; width:"+widthCanvas+"px;";
-        blockPortfolio.classList.remove("upBlockMain"); 
-        blockPortfolio.classList.remove("hide"); 
-        blockPortfolio.classList.add("initTop"); 
-        btnStart.style = "display:block";
-        btnStart.style = "left:"+pxLeft+"px; width:"+widthCanvas+"px; ";
+        blockPortfolio.style = "width:"+widthCanvas+"px;";
+        blockPortfolio.classList.remove("upBlockMain");
+        setTimeout(function(){
+            show();
+            blockPortfolio.classList.add("downBlockMain"); 
+            btnStart.style = "display:block";
+            btnStart.style = "left:"+pxLeft+"px; width:"+widthCanvas+"px; ";
+        },500);  
         totalScore = totalScore + score;
         elTotalScore.textContent = totalScore; 
         if (score > bestScore){
@@ -79,7 +113,35 @@ var countLife = function (){
     }
 }
 
-var affichageHUD = function(){
+var startPlay = function(){ // Lancement du Jeu et Réinitialisation des valeur
+    start = true;
+    btnStart.style = "display: none;";
+    life = 3; 
+    alive = true;
+    score = 0;
+    timerSpritedead = 0; 
+}
+
+var clearRect = function(){ 
+    ctx.clearRect(0,0,widthCanvas, heightCanvas); 
+}
+
+var backgroundGame = function(){
+    ctx.drawImage(backgroundCanvasBack, -1000, backgroundBackY);
+    ctx.drawImage(backgroundCanvasBack, -1000, backgroundBackY2);
+     
+    if(backgroundBackY > 4096){
+        backgroundBackY = -4095.5; 
+    }
+    if(backgroundBackY2 > 4096){
+        backgroundBackY2 = -4095.5; 
+    }
+
+    backgroundBackY += 0.5; 
+    backgroundBackY2 += 0.5; 
+}
+
+var affichageHUD = function(){ // Affichage Score et Vie
     ctx.font = "20px Arial";
     ctx.fillText('vie:', 20, 25); 
     ctx.fillText(life, 60, 25);
@@ -87,15 +149,6 @@ var affichageHUD = function(){
     ctx.fillText(score,widthCanvas-90, 25);
 }
 
-
-
-var startPlay = function(){
-    start = true;
-    btnStart.style = "display: none;";
-    life = 3; 
-    alive = true;
-    score = 0; 
-}
 
 // vaisseau du joueur -----------------------------------
 
@@ -107,6 +160,8 @@ var shipPlayerCordX,
     bulletPlayer, 
     arrayLaser = [],
     countLaserPlayer = 0
+    
+var audioShootPlayer = document.querySelector('[name="audioShootPlayer"]')
     
 
 var shipPlayer = function(){ //function qui dessine le vaisseau du joueur sur le canvas 
@@ -120,6 +175,8 @@ var pushLaser = function(){
         arrayLaser.push(new Laser(shipPlayerCordX+10, shipPlayerCordY+10));
         countLaserPlayer = 0; 
     }
+    
+    //audioShootPlayer.play();
 }
 
 var Laser = function(cordX, cordY){
@@ -284,6 +341,10 @@ var ShipEnnemyTank = function(posTankX, posTankY){ // function constructeur chas
             }
         }
     }
+}
+
+var Asteroid = function (){
+    
 }
 
 
@@ -480,11 +541,11 @@ var init = function(){ // Initialisation du canvas
     
     ctx.canvas.width= widthCanvas-2;
     ctx.canvas.height =heightCanvas;
-
+    //audioShootPlayer = new Audio('./assets/files/sound/laser.mp3');
     backgroundCanvasBack = new Image(); 
     backgroundCanvasBack.src = './assets/files/Background/Nebula Aqua-Pink.png';
     shipPlayerImg = new Image();
-    shipPlayerImg.src = './assets/files/PixelSpaceships/PlayerShip.png'; 
+    shipPlayerImg.src = './assets/files/PixelSpaceships/PlayerShip1.png'; 
     bulletPlayer = new Image(); 
     bulletPlayer.src = './assets/files/Blue/bullet2.png';
     bulletEnnemy = new Image(); 
@@ -498,15 +559,16 @@ var moteurJeux = function(){
     backgroundGame();
     if(alive && start && life > 0){
         affichageHUD(); 
-        shipPlayer();
+        
         gestionEnnemyEc();
         gestionEnnemyTank(); 
         pushLaser(); 
         laserOnScreen();
         colision();
+        changeSprite(); 
     }
-    
-    
+    shipPlayer();
+    spritePlayerDead(); 
     //console.log(arrayEnnemyEC); 
     //console.log(arrayEnnemyEC.arrayLaserEC);
     requestAnimationFrame(moteurJeux, 1000/60); 
@@ -531,17 +593,24 @@ canvas.addEventListener("touchmove", function (e) {
       clientY: touch.clientY -25
     });
     canvas.dispatchEvent(mouseEvent);
-  }, false);
+}, false);
 
-  function hide(){
+function hide(){
+    blockPortfolio.classList.remove('show');
     blockPortfolio.classList.add('hide');  
-  }
+}
+
+function show(){
+    blockPortfolio.classList.remove('hide'); 
+    blockPortfolio.classList.add('show');  
+}
 
   for( var p = 0; p < btnPlay.length; p++){
     btnPlay[p].addEventListener('click', function(){
         startPlay();
         //blockPortfolio.style = "display:none";
-        blockPortfolio.classList.remove('initTop'); 
+        blockPortfolio.classList.remove('initTop');
+        blockPortfolio.classList.remove('downBlockMain');
         blockPortfolio.classList.add('upBlockMain'); 
         setTimeout(hide, 700);  
     })

@@ -176,6 +176,7 @@ canvas{
         width: 100%; 
         font-weight: bold; 
         color: #0098d3ff; 
+        font-size: 20px; 
     }
 
     span{
@@ -407,16 +408,42 @@ hr{
     0%{
         top: 0px; 
     }
+    90%{
+        display: none;
+    }
     100%{
         top: -2000px; 
     }
 }
 
-.initTop{top:0px;}
 
-.hide{
-    display: none !important;
+.downBlockMain{
+    animation: downMove 1s linear; 
 }
+
+@keyframes downMove {
+    0%{
+        top: -2000px; 
+    }
+    10%{
+        display: block; 
+    }
+    100%{
+        top: 0px; 
+    }
+}
+
+.initTop{
+    top: 0px; 
+}
+.hide{
+    display: none; 
+}
+
+.show{
+    display: block; 
+}
+
 
 
 
