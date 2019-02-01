@@ -16,7 +16,8 @@ var canvas,
     totalScore = 0,
     life = 3, 
     alive = true, 
-    start = false 
+    start = false,
+    audioShootPlayer 
 
     if (window.innerWidth > 992){
         widthCanvas = window.innerWidth/2;
@@ -227,7 +228,7 @@ var pushLaser = function(){
         countLaserPlayer = 0; 
     }
     
-    //audioShootPlayer.play();
+    audioShootPlayer.play();
 }
 
 var Laser = function(cordX, cordY){
@@ -592,7 +593,7 @@ var init = function(){ // Initialisation du canvas
     
     ctx.canvas.width= widthCanvas-2;
     ctx.canvas.height =heightCanvas;
-    //audioShootPlayer = new Audio('./assets/files/sound/laser.mp3');
+    audioShootPlayer = new Audio('./assets/files/sound/laser.mp3');
     backgroundCanvasBack = new Image(); 
     backgroundCanvasBack.src = './assets/files/Background/Nebula Aqua-Pink.png';
     shipPlayerImg = new Image();
@@ -610,7 +611,6 @@ var moteurJeux = function(){
     backgroundGame();
     if(alive && start && life > 0){
         affichageHUD(); 
-        
         gestionEnnemyEc();
         gestionEnnemyTank(); 
         pushLaser(); 
