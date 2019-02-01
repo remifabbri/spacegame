@@ -79,7 +79,32 @@ canvas{
     margin-top: 75px; 
 }
 
+.btnRecruteur{
+    width: 100%; 
+    background-color: rgba(255, 0, 0, 1); 
+    border: 3px solid rgba(255, 0, 0, 1); 
+    box-shadow: 0px 0px 10px 0px rgba(255, 0, 0, .5);
+    border-radius: 5px;
+    color: white; 
+    font-size: 16px; 
+    font-weight: bold;
+    cursor: pointer;  
+
+    a{
+        color: white; 
+    }
+    
+    &:hover{
+        box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, .5);
+    }
+}
+
 .contact{
+    .description{
+        text-align: center; 
+        color: white; 
+        margin: 15px auto; 
+    }
     .prez{
         width: 100%; 
         display: flex; 
@@ -164,9 +189,92 @@ canvas{
     }
 }
 
+.blockExp{
+    display: flex; 
+    flex-flow: row nowrap; 
+    justify-content: flex-start; 
+
+    img{
+        height: 75px; 
+        width: 75px;
+        margin-right: 15px;  
+    }
+    div{
+        h3{
+            color: white; 
+            margin-bottom: 5px;
+            font-size: 1.5em; 
+        }
+        a{
+            color: #0098d3ff;
+            margin-bottom: 5px;
+            display: block;  
+        }
+        p{
+            color: lightgrey;
+            margin-bottom: 5px; 
+        }
+    }
+}
+
+.etude{
+    display: flex; 
+    flex-flow: row nowrap; 
+    justify-content: space-between; 
+
+    img{
+        max-height: 75px; 
+        max-width: 175px;
+        margin-right: 15px;  
+    }
+    div{
+        h3{
+            color: white; 
+            margin-bottom: 5px;
+            font-size: 1.5em; 
+        }
+        a{
+            color: #0098d3ff;
+            margin-bottom: 5px;
+            display: block;  
+        }
+        p{
+            color: lightgrey;
+            margin-bottom: 5px; 
+        }
+    }
+}
+
+
+.ExpAnnexe{
+    display: flex; 
+    flex-flow: column nowrap; 
+    justify-content: space-between; 
+
+    .waitScore{
+        width: 100;  
+    }
+    div{
+        h3{
+            color: white; 
+            margin-bottom: 5px;
+            font-size: 1.5em; 
+        }
+        a{
+            color: #0098d3ff;
+            margin-bottom: 5px;
+            display: block;  
+        }
+        p{
+            color: lightgrey;
+            margin-bottom: 5px; 
+        }
+    }
+}
 
 .sep{
-    margin-top: 25px; 
+    margin-top: 25px;
+    margin-bottom: 25px; 
     display: flex; 
     flex-flow: row nowrap;
     align-items: center; 
@@ -189,7 +297,12 @@ canvas{
     }
 }
 
-
+.hrExp{
+    width: 50%; 
+    margin: 10px auto; 
+    border-color: grey;
+    box-shadow: none; 
+}
 
 hr{
     width: 75%; 
@@ -197,8 +310,6 @@ hr{
     border-color: #0098d3ff;
     box-shadow: 0px 0px 10px 0px rgba(0, 152, 211, .5); 
 }
-
-
 
 .waitScore{
     display: flex; 

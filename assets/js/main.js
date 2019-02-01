@@ -75,22 +75,33 @@ var spritePlayerDead = function(){
 var btnStart = document.querySelector('.btnStart');
 var btnPlay = document.querySelectorAll('.play');
 var elTotalScore = document.querySelector('.ScoreTotal span');
-var elBestScore = document.querySelector('.BestScore span'); 
+var elBestScore = document.querySelector('.BestScore span');
+var elBtnRecruteru = document.querySelector('.btnRecruteur');  
 
+var recruteur = false;
 
+elBtnRecruteru.addEventListener('click', function(){
+    totalScore = 1000; 
+    recruteur = true;
+    countLife();  
+})
 
 var countLife = function (){
     life -=1;
-    if(life === 0){
+    if(life === 0 || recruteur){
         alive = false;
-        blockPortfolio.style = "width:"+widthCanvas+"px;";
-        blockPortfolio.classList.remove("upBlockMain");
-        setTimeout(function(){
-            show();
-            blockPortfolio.classList.add("downBlockMain"); 
-            btnStart.style = "display:block";
-            btnStart.style = "left:"+pxLeft+"px; width:"+widthCanvas+"px; ";
-        },500);  
+
+        if(!recruteur){
+            blockPortfolio.style = "width:"+widthCanvas+"px;";
+            blockPortfolio.classList.remove("upBlockMain");
+            setTimeout(function(){
+                show();
+                blockPortfolio.classList.add("downBlockMain"); 
+                btnStart.style = "display:block";
+                btnStart.style = "left:"+pxLeft+"px; width:"+widthCanvas+"px; ";
+            },500);  
+        }
+        
         totalScore = totalScore + score;
         elTotalScore.textContent = totalScore; 
         if (score > bestScore){
@@ -110,6 +121,46 @@ var countLife = function (){
                 Score0[b].classList.add('enableScore'); 
             }
         }
+        if (totalScore > 200){
+            var DefautlScore500 = document.querySelectorAll('[name="Defaultscore500"]');
+            var Score500 = document.querySelectorAll('[name="score500"]'); 
+
+            for(var b=0; b<DefautlScore500.length; b++){     
+                DefautlScore500[b].classList.remove('defaultScore');
+                DefautlScore500[b].classList.add('disableScore');
+            }
+            for(var b=0; b<Score500.length; b++){
+                Score500[b].classList.remove('disableScore'); 
+                Score500[b].classList.add('enableScore'); 
+            }
+        }
+        if (totalScore > 400){
+            var DefautlScore1000 = document.querySelectorAll('[name="Defaultscore1000"]');
+            var Score1000 = document.querySelectorAll('[name="score1000"]');
+
+            for(var b=0; b<DefautlScore1000.length; b++){     
+                DefautlScore1000[b].classList.remove('defaultScore');
+                DefautlScore1000[b].classList.add('disableScore');
+            }
+            for(var b=0; b<Score1000.length; b++){
+                Score1000[b].classList.remove('disableScore'); 
+                Score1000[b].classList.add('enableScore'); 
+            }
+        }
+        if (totalScore > 800){
+            var DefautlScore1500 = document.querySelectorAll('[name="Defaultscore1500"]');
+            var Score1500 = document.querySelectorAll('[name="score1500"]');
+
+            for(var b=0; b<DefautlScore1500.length; b++){     
+                DefautlScore1500[b].classList.remove('defaultScore');
+                DefautlScore1500[b].classList.add('disableScore');
+            }
+            for(var b=0; b<Score1500.length; b++){
+                Score1500[b].classList.remove('disableScore'); 
+                Score1500[b].classList.add('enableScore'); 
+            }
+        }
+        recruteur=false; 
     }
 }
 
@@ -605,7 +656,7 @@ function show(){
     blockPortfolio.classList.add('show');  
 }
 
-  for( var p = 0; p < btnPlay.length; p++){
+for( var p = 0; p < btnPlay.length; p++){
     btnPlay[p].addEventListener('click', function(){
         startPlay();
         //blockPortfolio.style = "display:none";
@@ -614,7 +665,7 @@ function show(){
         blockPortfolio.classList.add('upBlockMain'); 
         setTimeout(hide, 700);  
     })
-  }
+}
  
 
   
