@@ -73,8 +73,8 @@ canvas {
 
 .btnRecruteur {
   width: 100%;
-  background-color: red;
-  border: 3px solid red;
+  background-color: #ce4029;
+  border: 3px solid #ce4029;
   box-shadow: 0px 0px 10px 0px rgba(255, 0, 0, 0.5);
   border-radius: 5px;
   color: white;

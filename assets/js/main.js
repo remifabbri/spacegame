@@ -16,15 +16,16 @@ var canvas,
     totalScore = 0,
     life = 3, 
     alive = true, 
-    start = false,
-    audioShootPlayer 
+    start = false
 
-    if (window.innerWidth > 992){
-        widthCanvas = window.innerWidth/2;
-    }else{
-        widthCanvas = window.innerWidth;
-    }
+var audioShootPlayer, 
+    audioBackground
 
+if (window.innerWidth > 992){
+    widthCanvas = window.innerWidth/2;
+}else{
+    widthCanvas = window.innerWidth;
+}
 
 var timerSprite = 0; 
 
@@ -91,7 +92,6 @@ var countLife = function (){
     life -=1;
     if(life === 0 || recruteur){
         alive = false;
-
         if(!recruteur){
             blockPortfolio.style = "width:"+widthCanvas+"px;";
             blockPortfolio.classList.remove("upBlockMain");
@@ -101,8 +101,8 @@ var countLife = function (){
                 btnStart.style = "display:block";
                 btnStart.style = "left:"+pxLeft+"px; width:"+widthCanvas+"px; ";
             },500);  
-        }
-        
+        }; 
+        audioBackground.pause(); 
         totalScore = totalScore + score;
         elTotalScore.textContent = totalScore; 
         if (score > bestScore){
@@ -195,6 +195,7 @@ var backgroundGame = function(){
 
 var affichageHUD = function(){ // Affichage Score et Vie
     ctx.font = "20px Arial";
+    ctx.fillStyle="red"
     ctx.fillText('vie:', 20, 25); 
     ctx.fillText(life, 60, 25);
     ctx.fillText('score:',widthCanvas-150, 25);
@@ -204,7 +205,7 @@ var affichageHUD = function(){ // Affichage Score et Vie
 
 // vaisseau du joueur -----------------------------------
 
-// varaible Global joueur
+// variable Global joueur
 var shipPlayerCordX,
     shipPlayerCordY,
     shipPlayerH = 45,
@@ -212,8 +213,6 @@ var shipPlayerCordX,
     bulletPlayer, 
     arrayLaser = [],
     countLaserPlayer = 0
-    
-var audioShootPlayer = document.querySelector('[name="audioShootPlayer"]')
     
 
 var shipPlayer = function(){ //function qui dessine le vaisseau du joueur sur le canvas 
@@ -227,8 +226,6 @@ var pushLaser = function(){
         arrayLaser.push(new Laser(shipPlayerCordX+10, shipPlayerCordY+10));
         countLaserPlayer = 0; 
     }
-    
-    audioShootPlayer.play();
 }
 
 var Laser = function(cordX, cordY){
@@ -294,13 +291,6 @@ var ShipEnnemyChasseur = function(posShipX, posShipY){ // function constructeur 
     }
     
     this.pushLaserEC = function(){
-        /**
-        Object.create(prototypeDeObjetACreer, objetDeDefinitionDeProprietes)
-        prototypeDeObjetACreer : est l'objet qui sera le prototype de l'objet créé
-        objetDeDefinitionDeProprietes: objet telle que décrit dans la doc qui décrit la nature des propriétés propres de l'objet à créer
-        **/
-    
-        // Ici on ajoute dans le tableau un objet qui à pour prototype this.drawLaserEC et qui a pour propriété propres cordXLaserEC avec la valeur indiquée et cordYLaserEC avec la valeur indiquée.
         this.arrayLaserEC.push(Object.create(this.drawLaserEC, {
           cordXLaserEC: {
             value: this.cordXEC + 20,
@@ -518,7 +508,6 @@ var colision = function(){
         }
     }
 
-
     // colision Ennemy chasseur 
     var shipPlayerCordXW = shipPlayerCordX + 43,
         shipPlayerCordYH = shipPlayerCordY + 40;
@@ -538,8 +527,7 @@ var colision = function(){
         if (shipPlayerCordYH > arrayEnnemyEC[f].cordYEC && shipPlayerCordYH < arrayEnnemyEC[f].cordYEC + 40 && shipPlayerCordXW < arrayEnnemyEC[f].cordXEC + 43 && shipPlayerCordXW > arrayEnnemyEC[f].cordXEC) {
             arrayEnnemyEC.splice([f], 1);            
             return countLife(); 
-        }
-        
+        } 
     }
 
     for( var Ec =0; Ec < arrayEnnemyEC.length; Ec++ ){
@@ -590,10 +578,10 @@ var colision = function(){
 var init = function(){ // Initialisation du canvas
     canvas = document.querySelector('canvas');
     ctx = canvas.getContext('2d');
-    
     ctx.canvas.width= widthCanvas-2;
     ctx.canvas.height =heightCanvas;
-    audioShootPlayer = new Audio('./assets/files/sound/laser.mp3');
+    audioShootPlayer = new Audio('./assets/files/sound/laser1.mp3');
+    audioBackground = new Audio('./assets/files/sound/backgroundSound.wav');
     backgroundCanvasBack = new Image(); 
     backgroundCanvasBack.src = './assets/files/Background/Nebula Aqua-Pink.png';
     shipPlayerImg = new Image();
@@ -602,27 +590,25 @@ var init = function(){ // Initialisation du canvas
     bulletPlayer.src = './assets/files/Blue/bullet2.png';
     bulletEnnemy = new Image(); 
     bulletEnnemy.src = './assets/files/Red/bullet_red2.png';  
-    //console.log(shipPlayerImg);  
-    moteurJeux(); // function récurcive 
+    moteurJeux();
 }
 
 var moteurJeux = function(){
     clearRect();
     backgroundGame();
     if(alive && start && life > 0){
+        audioBackground.play(); 
         affichageHUD(); 
         gestionEnnemyEc();
         gestionEnnemyTank(); 
         pushLaser(); 
         laserOnScreen();
         colision();
-        changeSprite(); 
+        changeSprite();
     }
     shipPlayer();
-    spritePlayerDead(); 
-    //console.log(arrayEnnemyEC); 
-    //console.log(arrayEnnemyEC.arrayLaserEC);
-    requestAnimationFrame(moteurJeux, 1000/60); 
+    spritePlayerDead();
+    requestAnimationFrame(moteurJeux, 1000/30); 
     //moteur = setTimeout(moteurJeux, 1000/30); 
 }
 
@@ -634,7 +620,6 @@ init();
 canvas.addEventListener('mousemove', function(evt){ 
     shipPlayerCordX = evt.clientX - canvas.offsetLeft - shipPlayerH/2;  
     shipPlayerCordY = evt.clientY - canvas.offsetTop - shipPlayerW/2; 
-    //console.log(shipPlayerCordY);  
 })
 
 canvas.addEventListener("touchmove", function (e) {
@@ -646,6 +631,7 @@ canvas.addEventListener("touchmove", function (e) {
     canvas.dispatchEvent(mouseEvent);
 }, false);
 
+
 function hide(){
     blockPortfolio.classList.remove('show');
     blockPortfolio.classList.add('hide');  
@@ -656,23 +642,20 @@ function show(){
     blockPortfolio.classList.add('show');  
 }
 
-for( var p = 0; p < btnPlay.length; p++){
+for( var p = 0; p < btnPlay.length; p++){ // gestion des bouttons jouer
     btnPlay[p].addEventListener('click', function(){
         startPlay();
-        //blockPortfolio.style = "display:none";
         blockPortfolio.classList.remove('initTop');
         blockPortfolio.classList.remove('downBlockMain');
         blockPortfolio.classList.add('upBlockMain'); 
         setTimeout(hide, 700);  
     })
 }
- 
 
-  
-  var blockPortfolio = document.querySelector('.blockPortfolio');
-  blockPortfolio.style = "width:"+widthCanvas+"px;";
-  var pxLeft=canvas.offsetLeft; 
-  btnStart.style = "left:"+pxLeft+"px; width:"+widthCanvas+"px; ";
+var blockPortfolio = document.querySelector('.blockPortfolio');
+blockPortfolio.style = "width:"+widthCanvas+"px;";
+var pxLeft=canvas.offsetLeft; 
+btnStart.style = "left:"+pxLeft+"px; width:"+widthCanvas+"px; ";
   
   
 
