@@ -587,9 +587,9 @@ var init = function(){ // Initialisation du canvas
     shipPlayerImg = new Image();
     shipPlayerImg.src = './assets/files/PixelSpaceships/PlayerShip1.png'; 
     bulletPlayer = new Image(); 
-    bulletPlayer.src = './assets/files/Blue/bullet2.png';
+    bulletPlayer.src = './assets/files/bullet2.png';
     bulletEnnemy = new Image(); 
-    bulletEnnemy.src = './assets/files/Red/bullet_red2.png';  
+    bulletEnnemy.src = './assets/files/bullet_red2.png';  
     moteurJeux();
 }
 
