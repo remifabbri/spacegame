@@ -24,7 +24,7 @@ canvas {
 .btnStart {
   display: flex;
   flex-flow: column nowrap;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: flex-end;
   position: fixed;
   left: 0px;
@@ -52,6 +52,23 @@ canvas {
 }
 .btnStart:hover::before {
   width: 100%;
+}
+@media (max-width: 500px) {
+  .btnStart .ScoreTotal, .btnStart .BestScore {
+    font-size: 0.7em;
+  }
+}
+
+.waitScore {
+  width: 100%;
+}
+@media (max-width: 500px) {
+  .waitScore p, .waitScore button {
+    font-size: 12px !important;
+  }
+  .waitScore .iconM {
+    width: 60px;
+  }
 }
 
 .blockPortfolio {
@@ -101,6 +118,11 @@ canvas {
   justify-content: space-between;
   align-items: center;
 }
+@media (max-width: 500px) {
+  .contact .prez img {
+    height: 75px;
+  }
+}
 .contact .prez h1, .contact .prez h2 {
   font-size: 3vw;
   color: #0098d3ff;
@@ -117,6 +139,12 @@ canvas {
   justify-content: space-between;
   align-items: center;
   color: white;
+}
+@media (max-width: 500px) {
+  .contact .adresse {
+    flex-flow: column nowrap;
+    align-items: flex-start;
+  }
 }
 .contact .adresse span {
   display: flex;
@@ -191,10 +219,21 @@ canvas {
   flex-flow: row nowrap;
   justify-content: space-between;
 }
+@media (max-width: 500px) {
+  .etude {
+    flex-flow: column nowrap;
+  }
+}
 .etude img {
   max-height: 75px;
   max-width: 175px;
   margin-right: 15px;
+}
+@media (max-width: 500px) {
+  .etude img:nth-child(2) {
+    flex-flow: column nowrap;
+    max-width: 100px !important;
+  }
 }
 .etude div h3 {
   color: white;
@@ -218,6 +257,14 @@ canvas {
 }
 .ExpAnnexe .waitScore {
   width: 100;
+}
+.ExpAnnexe .waitScore p {
+  font-size: 16px;
+}
+@media (max-width: 500px) {
+  .ExpAnnexe .waitScore p, .ExpAnnexe .waitScore button {
+    font-size: 16px;
+  }
 }
 .ExpAnnexe div h3 {
   color: white;
