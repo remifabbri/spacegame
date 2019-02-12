@@ -89,6 +89,7 @@ canvas {
 }
 
 .btnRecruteur {
+  display: flex;
   width: 100%;
   background-color: #ce4029;
   border: 3px solid #ce4029;
@@ -98,6 +99,13 @@ canvas {
   font-size: 12px;
   font-weight: bold;
   cursor: pointer;
+  margin: 0 auto;
+}
+@media (min-width: 639px) {
+  .btnRecruteur {
+    width: 75%;
+    font-size: 16px;
+  }
 }
 .btnRecruteur a {
   color: white;
@@ -110,6 +118,11 @@ canvas {
   text-align: center;
   color: white;
   margin: 15px auto;
+}
+@media (min-width: 639px) {
+  .contact .description {
+    width: 75%;
+  }
 }
 .contact .prez {
   width: 100%;
